@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WHO 5판 골수성 종양 분류와 ELN-2022 AML 위험층화 검증 — 세 논문 심층 해설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F5F8; --surface:#FFFFFF; --ink:#1F1C2C; --muted:#5C586E; --rule:#DAD7E4;
+  --azure:#3B378A; --azure-soft:#E9E8F6; --eosin:#AE2F63; --eosin-soft:#F8E7EE;
+  --fav:#24735F; --vfav:#17503F; --int:#97701A; --adv:#AE2F63; --vadv:#5E1734;
+  --code:#EEEDF4;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14121C; --surface:#1C1928; --ink:#ECEAF4; --muted:#A7A3BA; --rule:#34304A;
+    --azure:#ABA6F2; --azure-soft:#26233D; --eosin:#F07BA8; --eosin-soft:#3A1F2D;
+    --fav:#5CC4A6; --vfav:#86E0C4; --int:#E0B654; --adv:#F07BA8; --vadv:#FF9EC2;
+    --code:#272339; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14121C; --surface:#1C1928; --ink:#ECEAF4; --muted:#A7A3BA; --rule:#34304A;
+  --azure:#ABA6F2; --azure-soft:#26233D; --eosin:#F07BA8; --eosin-soft:#3A1F2D;
+  --fav:#5CC4A6; --vfav:#86E0C4; --int:#E0B654; --adv:#F07BA8; --vadv:#FF9EC2;
+  --code:#272339; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  font-size:1.0625rem;line-height:1.78;word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,h4{font-family:"Noto Serif KR","AppleMyungjo","Batang",serif;line-height:1.35;color:var(--ink)}
+a{color:var(--azure);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid var(--eosin);outline-offset:2px;border-radius:3px}
+em.gene,i.gene{font-style:italic}
+.layout{display:grid;grid-template-columns:minmax(0,18rem) minmax(0,1fr);gap:3rem;max-width:76rem;margin:0 auto;padding:0 1.5rem}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;max-height:100vh;overflow-y:auto;padding:2rem 0 2rem;font-size:.9rem;line-height:1.55}
+nav.toc .toc-title{font-family:"Noto Serif KR",serif;font-weight:700;font-size:1.05rem;margin:0 0 .75rem}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc > ol > li{margin:.9rem 0 .2rem}
+nav.toc > ol > li > a{font-weight:600;color:var(--ink);text-decoration:none}
+nav.toc ol ol{margin:.3rem 0 0 .2rem;padding-left:.8rem;border-left:2px solid var(--rule)}
+nav.toc ol ol li{margin:.25rem 0}
+nav.toc ol ol a{color:var(--muted);text-decoration:none}
+nav.toc a:hover{color:var(--azure);text-decoration:underline}
+nav.toc a.active{color:var(--eosin);font-weight:600}
+main{min-width:0;padding:2.5rem 0 5rem}
+.measure{max-width:44rem}
+header.hero{padding:1.5rem 0 2.5rem;border-bottom:1px solid var(--rule);margin-bottom:2.5rem}
+header.hero h1{font-size:clamp(1.9rem,4.2vw,2.9rem);font-weight:900;letter-spacing:-.02em;margin:.2rem 0 1rem}
+header.hero p.lede{font-size:1.15rem;color:var(--muted);max-width:40rem;margin:0 0 2rem}
+.papers{display:grid;gap:0;border-top:2px solid var(--ink)}
+.paper{display:grid;grid-template-columns:5.5rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--rule)}
+.paper .tag{font-family:"Noto Serif KR",serif;font-weight:700;font-size:1.6rem;line-height:1;color:var(--azure)}
+.paper .tag small{display:block;font-family:"IBM Plex Sans KR",sans-serif;font-size:.75rem;font-weight:500;color:var(--muted);margin-top:.35rem}
+.paper h3{font-size:1.02rem;margin:0 0 .25rem;font-family:"IBM Plex Sans KR",sans-serif;font-weight:600}
+.paper p{margin:0;font-size:.92rem;color:var(--muted);line-height:1.6}
+.paper .role{display:inline-block;margin-top:.45rem;font-size:.85rem;color:var(--ink);background:var(--azure-soft);padding:.1rem .55rem;border-radius:4px}
+section.part{margin-top:4.5rem}
+section.part > h2{font-size:clamp(1.55rem,3vw,2.1rem);font-weight:900;margin:0 0 .4rem;padding-top:.5rem}
+section.part > .part-sub{color:var(--muted);margin:0 0 2rem;font-size:.98rem}
+h3{font-size:1.3rem;margin:2.6rem 0 .8rem}
+h4{font-size:1.08rem;margin:1.8rem 0 .5rem}
+p{margin:0 0 1.05rem}
+ul,ol.prose{padding-left:1.25rem;margin:0 0 1.1rem}
+li{margin:.3rem 0}
+strong{font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+.box{border-radius:6px;padding:1.05rem 1.25rem;margin:1.6rem 0;font-size:.98rem;line-height:1.7}
+.box > :last-child{margin-bottom:0}
+.box .box-h{font-weight:600;margin:0 0 .4rem;font-size:.98rem}
+.box.concept{background:var(--azure-soft);border-left:4px solid var(--azure)}
+.box.critique{background:var(--eosin-soft);border-left:4px solid var(--eosin)}
+.box.summary{background:var(--surface);border:1px solid var(--rule)}
+.tablewrap{overflow-x:auto;margin:1.4rem 0 1.8rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.9rem;line-height:1.5}
+caption{text-align:left;padding:.75rem 1rem .25rem;font-weight:600;font-size:.92rem;color:var(--ink)}
+th,td{padding:.55rem .9rem;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+thead th{background:var(--code);font-weight:600;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.figure{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.1rem 1.1rem .6rem;margin:1.6rem 0 1.8rem;overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:30rem;height:auto}
+.figure .fig-cap{font-size:.86rem;color:var(--muted);margin:.6rem 0 .4rem;line-height:1.55}
+.figure .fig-title{font-weight:600;font-size:.95rem;margin:0 0 .5rem}
+svg text{font-family:"IBM Plex Sans KR",system-ui,sans-serif}
+.chip{display:inline-block;font-size:.8rem;padding:.05rem .45rem;border-radius:3px;font-weight:600;color:#fff;vertical-align:1px}
+.chip.fav{background:var(--fav)} .chip.int{background:var(--int)} .chip.adv{background:var(--adv)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip{color:#14121C}}
+:root[data-theme="dark"] .chip{color:#14121C}
+dl.gloss{display:grid;grid-template-columns:minmax(7rem,11rem) 1fr;gap:.55rem 1.2rem;margin:1rem 0 1.5rem;font-size:.95rem}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--ink)}
+ol.refs{font-size:.88rem;line-height:1.6;color:var(--muted);padding-left:1.4rem}
+ol.refs li{margin:.45rem 0}
+footer{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--rule);font-size:.85rem;color:var(--muted)}
+.mobile-toc{display:none}
+@media (max-width: 960px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:0;padding:0 1.1rem}
+  nav.toc{display:none}
+  .mobile-toc{display:block;margin:0 0 2rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+  .mobile-toc summary{cursor:pointer;padding:.8rem 1rem;font-weight:600;font-family:"Noto Serif KR",serif}
+  .mobile-toc nav{padding:0 1rem 1rem;font-size:.92rem}
+  .mobile-toc ol{list-style:none;padding-left:0;margin:0}
+  .mobile-toc ol ol{padding-left:1rem}
+  .mobile-toc li{margin:.35rem 0}
+  .mobile-toc a{text-decoration:none}
+  .paper{grid-template-columns:4rem 1fr}
+  dl.gloss{grid-template-columns:1fr;gap:.15rem}
+  dl.gloss dd{margin-bottom:.7rem}
+}
+@media print{nav.toc,.mobile-toc{display:none}.layout{display:block}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="toc" aria-label="목차" id="toc">
+  <p class="toc-title">목차</p>
+  <ol>
+    <li><a href="#overview">0. 세 논문의 관계와 읽는 법</a></li>
+    <li><a href="#p1">I. WHO 5판 골수성·조직구성 종양 분류</a>
+      <ol>
+        <li><a href="#p1-principles">1.1 분류 철학과 명명 원칙</a></li>
+        <li><a href="#p1-ch">1.2 클론성 조혈 (CHIP·CCUS)</a></li>
+        <li><a href="#p1-mpn">1.3 골수증식종양 (MPN)</a></li>
+        <li><a href="#p1-mast">1.4 비만세포증</a></li>
+        <li><a href="#p1-mds">1.5 골수형성이상종양 (MDS)</a></li>
+        <li><a href="#p1-mdsmpn">1.6 MDS/MPN</a></li>
+        <li><a href="#p1-aml">1.7 급성골수성백혈병 (AML)</a></li>
+        <li><a href="#p1-secondary">1.8 이차성 골수종양</a></li>
+        <li><a href="#p1-mlntk">1.9 MLN-TK</a></li>
+        <li><a href="#p1-alal">1.10 혼합·모호 계통 급성백혈병</a></li>
+        <li><a href="#p1-histio">1.11 조직구·수지상세포 종양</a></li>
+        <li><a href="#p1-syndrome">1.12 유전성 종양 증후군</a></li>
+        <li><a href="#p1-critique">1.13 비판적 고찰: WHO vs ICC</a></li>
+      </ol>
+    </li>
+    <li><a href="#p2">II. Rausch 외 (Leukemia 2023)</a>
+      <ol>
+        <li><a href="#p2-bg">2.1 ELN-2022의 변경점</a></li>
+        <li><a href="#p2-methods">2.2 코호트와 방법론</a></li>
+        <li><a href="#p2-results">2.3 주요 결과</a></li>
+        <li><a href="#p2-mr">2.4 MR 돌연변이 논쟁</a></li>
+        <li><a href="#p2-flt3">2.5 FLT3-ITD 대립유전자비</a></li>
+        <li><a href="#p2-refine">2.6 5단계 정교화 제안</a></li>
+        <li><a href="#p2-critique">2.7 강점·한계 평가</a></li>
+      </ol>
+    </li>
+    <li><a href="#p3">III. Song 외 (Sci Rep 2024)</a>
+      <ol>
+        <li><a href="#p3-design">3.1 연구 설계</a></li>
+        <li><a href="#p3-results">3.2 재분류와 생존</a></li>
+        <li><a href="#p3-stats">3.3 C-index와 NRI</a></li>
+        <li><a href="#p3-hct">3.4 동종이식 결정에의 함의</a></li>
+        <li><a href="#p3-critique">3.5 강점·한계 평가</a></li>
+      </ol>
+    </li>
+    <li><a href="#p4">IV. 통합 고찰</a>
+      <ol>
+        <li><a href="#p4-compare">4.1 두 검증 연구 비교</a></li>
+        <li><a href="#p4-discord">4.2 결론이 갈린 이유</a></li>
+        <li><a href="#p4-methods">4.3 방법론적 교훈</a></li>
+        <li><a href="#p4-link">4.4 WHO 분류와 ELN 예후의 접점</a></li>
+        <li><a href="#p4-future">4.5 이후의 전개와 연구 과제</a></li>
+      </ol>
+    </li>
+    <li><a href="#p5">V. 핵심 정리와 용어</a></li>
+    <li><a href="#refs">참고문헌</a></li>
+  </ol>
+</nav>
+
+<main>
+<details class="mobile-toc">
+  <summary>목차 펼치기</summary>
+  <nav aria-label="목차 (모바일)" id="mtoc"></nav>
+</details>
+
+<header class="hero measure" id="top">
+  <h1>WHO 5판 골수성 종양 분류와 ELN-2022 AML 위험층화 검증</h1>
+  <p class="lede">진단의 언어를 다시 쓴 분류 체계 하나와, 새 예후 체계를 실제 환자 코호트에 적용해 본 두 검증 연구를 박사과정 수준에서 함께 읽습니다.</p>
+  <div class="papers">
+    <div class="paper">
+      <div class="tag">I<small>2022</small></div>
+      <div>
+        <h3>The 5th edition of the WHO Classification of Haematolymphoid Tumours: Myeloid and Histiocytic/Dendritic Neoplasms</h3>
+        <p>Khoury JD, Solary E, … Hochhaus A. <i>Leukemia</i> 2022;36:1703–1719. 리뷰 논문</p>
+        <span class="role">무엇인가: 질병의 정의와 진단 기준</span>
+      </div>
+    </div>
+    <div class="paper">
+      <div class="tag">II<small>2023</small></div>
+      <div>
+        <h3>Validation and refinement of the 2022 European LeukemiaNet genetic risk stratification of acute myeloid leukemia</h3>
+        <p>Rausch C, … Herold T, Metzeler KH. <i>Leukemia</i> 2023;37:1234–1244. 독일 AMLCG 코호트 1,118명</p>
+        <span class="role">얼마나 위험한가: 유럽 대규모 검증</span>
+      </div>
+    </div>
+    <div class="paper">
+      <div class="tag">III<small>2024</small></div>
+      <div>
+        <h3>Validation of the 2022 European LeukemiaNet risk stratification for acute myeloid leukemia</h3>
+        <p>Song GY, Kim HJ, Kim T, … Ahn JS, Kim DDH. <i>Sci Rep</i> 2024;14:8517. 한국 다기관 코호트 624명</p>
+        <span class="role">얼마나 위험한가: 한국 실제 임상 검증</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 0 ============ -->
+<section class="part measure" id="overview">
+  <h2>0. 세 논문의 관계와 읽는 법</h2>
+  <p class="part-sub">분류(classification)와 위험층화(risk stratification)는 서로 다른 질문에 답합니다.</p>
+
+  <p>세 논문은 2022년을 기점으로 골수성 종양 진료의 두 축이 동시에 개편된 상황을 보여줍니다. 첫 번째 축은 <strong>진단 분류</strong>로, 환자의 질환이 "무엇인지"를 정의합니다. 2022년에는 WHO 5판(WHO-HAEM5)과 International Consensus Classification(ICC)이 거의 동시에 발표되어, 이른바 "분류의 이원화" 시대가 열렸습니다. 논문 I은 이 중 WHO-HAEM5의 골수성 및 조직구·수지상세포 종양 부분을 요약한 공식 리뷰입니다.</p>
+  <p>두 번째 축은 <strong>예후 위험층화</strong>로, 같은 진단 안에서 환자가 "얼마나 위험한지"를 추정해 치료 강도, 특히 첫 관해기 동종조혈모세포이식(alloHCT) 여부를 결정하는 도구입니다. 성인 AML에서 사실상 국제 표준은 European LeukemiaNet(ELN) 권고안이며, 2017년판(ELN-2017)이 2022년판(ELN-2022)으로 개정되었습니다. 논문 II와 III은 이 ELN-2022를 서로 다른 두 집단, 즉 독일의 임상시험 코호트와 한국의 다기관 실제 진료 코호트에 적용해 이전 판과 비교한 검증 연구입니다.</p>
+  <p>읽을 때 염두에 둘 핵심 연결고리는 <strong>골수형성이상 관련(myelodysplasia-related, MR) 유전자 돌연변이</strong>입니다. WHO-HAEM5는 <i>SRSF2, SF3B1, U2AF1, ZRSR2, ASXL1, EZH2, BCOR, STAG2</i> 여덟 유전자를 AML-MR이라는 진단 범주의 정의 요소로 끌어들였고, ELN-2022는 같은 계열의 돌연변이를 불량(adverse) 예후 표지자로 격상했습니다. 그런데 두 검증 연구는 이 결정에 대해 서로 반대 방향의 증거를 제시합니다. 이 문서의 IV부는 그 불일치를 해부하는 데 할애됩니다.</p>
+
+  <div class="box concept">
+    <p class="box-h">개념 보충: 분류와 예후 체계의 구분</p>
+    <p>분류 체계는 생물학적 실체(entity)를 정의하는 것이 목적이므로, 이상적으로는 치료법이 바뀌어도 변하지 않아야 합니다. 반면 예후 체계는 <em>특정 치료 맥락에서의 결과</em>를 예측하는 통계적 도구이므로, 치료가 바뀌면(예: FLT3 억제제, 베네토클락스 도입) 재보정되어야 합니다. ELN-2022가 <i>FLT3</i>-ITD를 중간위험으로 옮긴 것은 생물학이 바뀌어서가 아니라 치료 맥락이 바뀌었기 때문이라는 점이 이 구분을 잘 보여줍니다.</p>
+  </div>
+</section>
+
+<!-- ============ PART I ============ -->
+<section class="part" id="p1">
+  <div class="measure">
+  <h2>I. WHO 5판 골수성·조직구성 종양 분류</h2>
+  <p class="part-sub">Khoury JD 외, <i>Leukemia</i> 2022;36:1703–1719 · 2017년 개정 4판 이후 첫 전면 개정</p>
+
+  <h3 id="p1-principles">1.1 분류 철학과 명명 원칙</h3>
+  <p>WHO 5판은 60여 년 역사상 처음으로 모든 장기의 종양을 하나의 <strong>관계형 데이터베이스</strong> 안에서 위계적으로 분류하는 시리즈의 일부로 제작되었습니다. 편집위원회는 주요 학회 대표로 구성된 상임위원과 권(volume)별 전문위원으로 이루어지며, 서지계량학적 근거에 따라 저자를 선정하고 지리적 다양성을 강조했습니다. 혈액림프 종양 권에는 총 420명이 참여했고, 질환 범주를 겹치게 배정해 내용의 연속성을 확보하려 했습니다.</p>
+  <p>분류의 위계는 <strong>범주(category) → 계열(family) → 유형(type) → 아형(subtype)</strong>으로 내려가며, 대체로 양성에서 악성 방향으로 배열됩니다. 각 질환명은 가능하면 세 가지 속성의 조합으로 구성됩니다.</p>
+  <ul>
+    <li><strong>계통(lineage)</strong>: 유세포분석 또는 면역조직화학으로 결정합니다.</li>
+    <li><strong>지배적 임상 속성</strong>: 급성, 만성, 혈구감소(골수형성이상), 혈구증가(골수증식) 같은 비치료 상태의 일반적 특징입니다.</li>
+    <li><strong>지배적 생물학적 속성</strong>: 융합(fusion), 재배열(rearrangement), 돌연변이(mutation)입니다.</li>
+  </ul>
+  <p>명명법에서 섬세한 구분이 있습니다. 두 유전자가 모두 진단에 필요하거나 바람직할 때는 융합으로 표기하고(예: <i>PML</i>::<i>RARA</i>), 지배적 유전자 하나에 다양한 파트너가 붙을 수 있을 때는 재배열로 표기합니다(예: <i>KMT2A</i> 재배열). 저자들은 "재배열"이라는 용어가 본래 면역글로불린이나 T세포수용체처럼 분절로 이루어진 유전자에 더 적합하다는 점을 인정하면서도 관례를 존중해 유지했다고 밝힙니다. 융합 표기는 HUGO 유전자명명위원회(HGNC) 권고에 따라 이중 콜론(::)을 사용합니다.</p>
+
+  <h4>"기타 정의된 유전 변이" 범주의 도입</h4>
+  <p>개정 4판의 잠정(provisional) 실체 지위는 폐지되고, 대신 각 질환 계열에 <strong>other defined genetic alterations</strong>라는 "착륙 지점"이 마련되었습니다. 새로운 희귀 실체가 이 자리에 아형으로 등재되려면 다음 네 기준을 참고합니다: 확립된 발암 기전에 의한 고유한 분자·세포유전학적 특징, 다른 유전 정의 유형의 기준을 충족하지 않음, 치료 반응을 포함한 고유한 병리·임상 특징, 서로 다른 연구진의 양질의 동료심사 논문 최소 두 편.</p>
+  <p>또한 분자 검사가 불가능한 자원 제한 환경을 고려해, 정밀한 유형 진단이 어려우면 상위 계열 수준의 정의로 되돌아갈 수 있도록 위계를 설계한 점이 강조됩니다. 이는 전 세계적 적용 가능성과 분자 정밀성 사이의 긴장을 다루는 구조적 해법입니다.</p>
+
+  <h3 id="p1-ch">1.2 클론성 조혈: 전구 상태의 공식 편입</h3>
+  <p>클론성 조혈(CH)은 설명되지 않는 혈구감소나 혈액암 없이, 선택적 성장 우위를 가진 변이 다능 줄기·전구세포 유래 세포 집단이 존재하는 상태입니다. 나이에 따라 빈도가 증가하고, 전체 사망률·심혈관질환·골수성 종양 위험 증가와 연관됩니다. <i>UBA1</i> 체세포 돌연변이에 의한 VEXAS 증후군처럼 염증과 CH의 상호작용을 보여주는 사례도 언급됩니다. 이번 판은 골수성 전구 병변을 정의·코딩하려는 첫 공식 시도라는 점에서 의미가 큽니다.</p>
+  </div>
+
+  <div class="tablewrap measure">
+    <table>
+      <caption>표 1. CHIP과 CCUS의 정의 및 통일된 혈구감소 기준</caption>
+      <thead><tr><th>항목</th><th>WHO-HAEM5 정의</th></tr></thead>
+      <tbody>
+        <tr><td>CHIP</td><td>골수성 종양 관련 유전자의 체세포 돌연변이, 혈액 또는 골수에서 VAF 2% 이상(남성의 X 연관 유전자는 4% 이상), 혈액질환 진단 및 설명되지 않는 혈구감소 없음</td></tr>
+        <tr><td>CCUS</td><td>CHIP 기준 + 다른 원인으로 설명되지 않는 지속적 혈구감소 1개 이상 + 정의된 골수성 종양 기준 미충족</td></tr>
+        <tr><td>빈혈</td><td>Hb 남성 &lt;13 g/dL, 여성 &lt;12 g/dL</td></tr>
+        <tr><td>호중구감소</td><td>ANC &lt;1.8 × 10⁹/L</td></tr>
+        <tr><td>혈소판감소</td><td>&lt;150 × 10⁹/L</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="measure">
+  <p>이 혈구감소 기준은 CCUS, MDS, MDS/MPN에 동일하게 적용되어 질환 간 경계를 일관되게 만듭니다. VAF 2% 미만 변이의 의미는 아직 불분명하다고 명시되어 있습니다.</p>
+
+  <h3 id="p1-mpn">1.3 골수증식종양(MPN)</h3>
+  <h4>만성골수성백혈병: 가속기의 삭제</h4>
+  <p>CML은 t(9;22)(q34;q11)에 의한 <i>BCR</i>::<i>ABL1</i>로 정의됩니다. 티로신키나제 억제제(TKI) 시대 이후 10년 전체생존율이 80–90%에 이르고 진행이 드물어지면서, <strong>가속기(AP)라는 구분의 임상적 의미가 약해졌습니다</strong>. 실제로 중요한 것은 <i>ABL1</i> 키나제 돌연변이에 의한 내성, 추가 세포유전학적 이상, 그리고 급성기(BP)로의 진행입니다. 그래서 5판은 AP를 없애고 만성기(CP)의 고위험 특징을 강조합니다.</p>
+  <p>급성기 기준은 다음 중 하나입니다: 혈액 또는 골수의 골수모세포 20% 이상, 골수 외 모세포 증식, 혈액 또는 골수 내 림프모세포 증가. 림프모세포의 최적 절단값과 소량 B-림프모세포의 의미는 미해결 과제로 남겨져 있습니다.</p>
+
+  <h4><i>BCR</i>::<i>ABL1</i> 음성 MPN</h4>
+  <p>PV, ET, PMF의 구분은 혈액 소견, 분자 소견, 골수 생검 형태를 통합해야 한다는 원칙이 유지됩니다. 단일 지표로는 특이도가 부족하기 때문입니다. PV에서는 <sup>51</sup>Cr 표지 적혈구량 측정이 실제 진료에서 거의 쓰이지 않아 진단 기준에서 삭제되었습니다. PMF에서는 전섬유화기(prefibrotic) PMF를 ET·PV 및 섬유화기 PMF와 구별하는 것이 여전히 필수입니다.</p>
+  <p>구동(driver) 돌연변이인 <i>JAK2, CALR, MPL</i> 외에 <i>TET2, ASXL1, DNMT3A</i> 돌연변이가 환자의 절반 이상에서 발견되며, 스플라이싱 인자와 후성유전 조절 유전자 돌연변이는 PMF와 진행된 질환에서 더 흔합니다. PMF에서 <i>EZH2, IDH1/2, SRSF2, U2AF1, ASXL1</i>은 불량 예후와 연관됩니다.</p>
+  <ul>
+    <li><strong>만성호중구백혈병(CNL)</strong>: WBC 25 × 10⁹/L 이상, 분엽·간상 호중구 80% 이상. <i>CSF3R</i> 돌연변이가 60% 이상에서 발견됩니다.</li>
+    <li><strong>만성호산구백혈병(CEL)</strong>: 세 가지가 바뀌었습니다. 지속적 호산구증가의 기간이 6개월에서 4주로 단축되었고, 클론성과 비정상 골수 형태가 모두 요구되며, 모세포 증가를 클론성의 대체 근거로 인정하던 조항이 삭제되었습니다. 이로써 특발성 과호산구증후군과의 구분이 개선되었고, "NOS" 수식어가 이름에서 빠졌습니다.</li>
+    <li><strong>소아골수단핵구백혈병(JMML)</strong>: MPN으로 재배치되었습니다. 90% 이상에서 RAS 경로 활성화가 병인이며, 진단 기준에서 <i>KMT2A</i> 재배열 배제가 추가되고 단염색체 7이 세포유전 기준에서 제외되었으며 분자 검사의 중요성이 강조되었습니다. 체세포 <i>PTPN11</i>과 신경섬유종증 1형 관련 사례가 가장 공격적이고, 생식세포 <i>CBL</i> 관련 사례 일부는 자연 관해를 보입니다.</li>
+  </ul>
+
+  <h3 id="p1-mast">1.4 비만세포증</h3>
+  <p>전신 비만세포증(SM), 피부 비만세포증(CM), 비만세포 육종(MCS)의 3유형 체계는 유지됩니다. SM 환자의 90% 이상에서 <i>KIT</i> 816번 코돈 점돌연변이가 발견되며, 진행형 SM의 대부분은 <i>TET2, SRSF2, ASXL1, RUNX1, JAK2</i> 등의 추가 돌연변이를 동반합니다.</p>
+  <ul>
+    <li><strong>부진단 기준 확대</strong>: CD30 발현과 리간드 비의존적 활성을 일으키는 <em>모든</em> <i>KIT</i> 돌연변이가 부기준으로 인정됩니다. 기저 혈청 트립타제 20 ng/mL 초과는 부기준이며, 유전성 알파-트립타제혈증이 있으면 보정해야 합니다.</li>
+    <li><strong>골수 비만세포증</strong>: 피부 병변과 B-소견이 없고 기저 트립타제 125 ng/mL 미만인 새로운 SM 아형입니다.</li>
+    <li><strong>B-소견 추가</strong>: 골수 또는 말초혈액에서 <i>KIT</i> D816V VAF 10% 이상이 B-소견("질병 부담")에 포함됩니다.</li>
+    <li><strong>잘 분화된 SM(WDSM)</strong>: 어떤 SM 아형에서도 나타날 수 있는 형태학적 패턴으로, 대개 <i>KIT</i> 816 돌연변이가 없고 CD25·CD2 음성, CD30 양성입니다.</li>
+  </ul>
+
+  <h3 id="p1-mds">1.5 골수형성이상종양(MDS)</h3>
+  <p>가장 상징적인 변화는 이름입니다. "골수형성이상<em>증후군</em>"이 "골수형성이상<em>종양</em>(myelodysplastic neoplasms)"으로 바뀌었고 약어는 MDS로 유지됩니다. 종양성 본질을 강조하고 MPN과 용어를 맞춘 것입니다. 이형성의 권장 역치는 모든 계통에서 10%로 통일되었습니다.</p>
+  <p>더 근본적인 변화는 조직 원리입니다. 개정 4판은 모세포 비율, 환상철모세포, 이형성 계통 수로 "위험 기반" 분류를 했지만, 5판은 MDS를 <strong>정의적 유전 이상이 있는 군</strong>과 <strong>형태학적으로 정의된 군</strong>으로 나누고, 위험 평가는 IPSS-R(현재는 IPSS-M) 같은 별도의 포괄적 예후 체계에 맡깁니다. 분류와 예후를 분리한다는 점에서 서론에서 말한 구분과 정확히 일치합니다.</p>
+  </div>
+
+  <div class="tablewrap measure">
+    <table>
+      <caption>표 2. WHO-HAEM5 MDS의 구조</caption>
+      <thead><tr><th>계열</th><th>유형</th><th>핵심 정의</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">유전적으로 정의됨</td><td>MDS-5q</td><td>저모세포 + 단독 5q 결실. 기준 불변. <i>SF3B1</i> 또는 단일 타격 <i>TP53</i> 동반이 진단을 뒤집지 않음</td></tr>
+        <tr><td>MDS-<i>SF3B1</i></td><td>저모세포 + <i>SF3B1</i> 돌연변이. 환상철모세포 5% 이상 MDS의 90% 이상을 포함. <i>SF3B1</i> 야생형이면 환상철모세포 15% 이상으로 "MDS-LB with ring sideroblasts" 사용 가능</td></tr>
+        <tr><td>MDS-bi<i>TP53</i></td><td>이중대립유전자 <i>TP53</i> 불활성화. 위 두 유형보다 우선함</td></tr>
+        <tr><td rowspan="3">형태학적으로 정의됨</td><td>MDS-LB</td><td>저모세포 (골수 &lt;5%, 혈액 &lt;2%)</td></tr>
+        <tr><td>MDS-h</td><td>저형성 MDS, 독립 유형으로 신설</td></tr>
+        <tr><td>MDS-IB1 / IB2 / f</td><td>모세포 증가 (IB1: 골수 5–9% 또는 혈액 2–4%, IB2: 골수 10–19% 또는 혈액 5–19% 또는 Auer 소체, f: 섬유화 동반)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="measure">
+  <h4>MDS-bi<i>TP53</i>: 분자 진단의 정밀성 요구</h4>
+  <p>병적 <i>TP53</i> 변이(염기서열 변이, 분절 결실, 복제수 중립 이형접합성 소실)는 MDS의 7–11%에서 발견되며, 그중 약 3분의 2가 다중 타격(multi-hit) 상태입니다. 다중 타격은 돌연변이가 둘 이상이거나, 한 대립유전자의 돌연변이와 다른 대립유전자의 결실이 함께 있는 경우로, 결과적으로 야생형 p53 단백질이 전혀 남지 않는 클론을 만듭니다.</p>
+  <p>진단에는 최소 엑손 4–11을 포함한 염기서열 분석과 함께 17p13.1 FISH 또는 CGH/SNP 어레이 같은 복제수 평가가 흔히 필요합니다. 실무적으로 중요한 규칙 두 가지가 있습니다. 첫째, 생식세포 변이가 배제되면 <i>TP53</i> VAF 50% 이상을 반대 대립유전자 소실의 <em>추정적</em>(확정적이 아닌) 근거로 볼 수 있습니다. 둘째, <i>TP53</i> 돌연변이가 둘 이상이면 대개 양쪽 대립유전자에 있으므로 다중 타격으로 간주할 수 있습니다. MDS-bi<i>TP53</i>의 90% 이상이 복합핵형(대부분 3개 초과)을 가지며, 치료적으로는 AML과 동등하게 취급할 수 있다는 근거가 제시됩니다. 다만 bi<i>TP53</i> 자체를 AML 정의 요소로 볼지는 향후 판으로 미루었습니다.</p>
+
+  <h4>저형성 MDS (MDS-h)</h4>
+  <p>MDS-h는 조혈 줄기·전구세포에 대한 T세포 매개 면역 공격, IFNγ·TNFα를 과생산하는 CD8 양성 세포독성 T세포의 올리고클론 증식과 연관됩니다. MDS-h, 발작성 야간 혈색소뇨증(PNH), 재생불량빈혈(AA)은 CH 동반을 포함해 상당 부분 겹치며, 많은 MDS-h 환자가 항흉선세포글로불린 같은 AA 치료에 지속적으로 반응합니다. 따라서 골수 생검을 포함한 세심한 형태 평가와 돌연변이·클론성 세포유전 이상 검출이 강조됩니다. <i>GATA2, DDX41</i>, 판코니 빈혈, 텔로머라제 복합체 유전자의 생식세포 변이 보유자는 저형성 골수를 보일 수 있으나 면역억제 치료에 반응하지 않으므로 반드시 감별해야 합니다.</p>
+
+  <h4>단일 계통과 다계통 이형성 구분의 선택화</h4>
+  <p>이형성 계통 수는 고정된 질병 속성이라기보다 클론 진화의 동적인 표현이라는 판단에 따라, 단일 계통과 다계통 이형성의 구분은 선택 사항이 되었습니다. CCUS가 분류에 들어오면서 "MDS, 분류불능(unclassifiable)"도 삭제되었습니다.</p>
+
+  <h4>MDS와 AML의 경계: 20% 유지의 논리</h4>
+  <p>이 부분은 WHO와 ICC가 갈라진 지점이므로 논리를 정확히 이해할 필요가 있습니다. 모세포 기반 경계를 재검토해야 한다는 주장의 근거는 세 가지였습니다: 어떤 절단값도 골수성 병인의 생물학적 연속성을 반영할 수 없다는 점, 모세포 계수가 표본 추출 오차와 주관적 평가에 취약하다는 점, 황금 표준이 없고 서로 다른 검사 플랫폼이 불일치하는 결과를 낸다는 점입니다.</p>
+  <p>WHO 편집위원회는 MDS-IB2를 AML과 합쳐 10% 절단값의 "MDS/AML"을 만드는 안을 검토했지만, 절단값을 낮추는 것은 같은 문제를 가진 다른 임의의 숫자로 바꾸는 것에 불과하고 과잉치료 위험이 있다고 판단했습니다. 대신 <strong>대부분의 유전 정의 AML 유형에서는 모세포 절단값을 없애고, MDS와 AML의 일반 경계로는 20%를 유지</strong>하는 절충안을 택했습니다. 동시에 MDS-IB2를 치료 및 임상시험 설계 관점에서 AML과 동등하게 볼 수 있다는 데 광범위한 합의가 있었다고 덧붙입니다.</p>
+
+  <h4>소아 MDS</h4>
+  <p>18세 미만에서 발생하는 소아 MDS는 연간 100만 명당 1–2명 정도이며 10–25%가 모세포 증가 상태로 진단됩니다. JMML, 다운증후군 관련 골수증식, 세포독성 치료 후 MDS는 제외됩니다. "불응성 소아 혈구감소증(RCC)"이라는 명칭은 <strong>저모세포 소아 MDS(cMDS-LB)</strong>로 바뀌었고 저세포성 아형과 NOS 아형으로 나뉩니다. 약 80%가 중증 재생불량빈혈과 유사한 저세포성 골수를 보여 세밀한 형태 검토가 필요합니다. 단염색체 7, 7q 결실, 복합핵형은 AML 진행 위험이 높아 대개 이식을 시행하고, 정상 핵형이나 삼염색체 8은 완만한 경과를 보일 수 있습니다. <strong>모세포 증가 소아 MDS(cMDS-IB)</strong>는 골수 5% 이상 또는 혈액 2% 이상 모세포로 정의됩니다.</p>
+
+  <h3 id="p1-mdsmpn">1.6 MDS/MPN</h3>
+  <h4>만성골수단핵구백혈병(CMML)의 대폭 개정</h4>
+  <p>진단 기준이 필수(prerequisite) 기준과 보조(supporting) 기준으로 재구성되었습니다.</p>
+  <ul>
+    <li><strong>단핵구증 역치 하향</strong>: 지속적 절대 단핵구증 기준이 1.0에서 0.5 × 10⁹/L로 낮아지고(상대 비율 10% 이상 동반), 과거 "소단핵구성(oligomonocytic) CMML"로 불리던 사례가 포함됩니다.</li>
+    <li><strong>안전장치</strong>: 절대 단핵구가 0.5 이상 1.0 미만이면 클론성 세포유전 또는 분자 이상과 최소 한 계통의 이형성 기록이 필요합니다.</li>
+    <li><strong>새 보조 기준</strong>: 말초혈액 단핵구 아형 분포의 이상(유세포분석에서 고전적 단핵구 MO1 분획 증가)이 추가되었습니다.</li>
+    <li><strong>아형</strong>: WBC 13 × 10⁹/L를 기준으로 골수형성이상형(MD-CMML)과 골수증식형(MP-CMML)이 공식 인정됩니다. MP-CMML은 RAS 경로 활성 돌연변이와 불량 예후와 흔히 연관됩니다.</li>
+    <li><strong>CMML-0 삭제</strong>: 예후 변별력이 없거나 미미하다는 근거에 따라 폐지되었습니다.</li>
+  </ul>
+  <p>그 밖에 비정형 CML은 CML과의 혼동을 피하기 위해 <strong>MDS/MPN with neutrophilia</strong>로 개명되었고, 환상철모세포와 혈소판증가를 동반한 MDS/MPN은 <i>SF3B1</i> 돌연변이 기반으로 재정의되었으며, "분류불능"은 분류 전체에서 그 역설적 의미 때문에 제거되어 <strong>MDS/MPN, NOS</strong>가 되었습니다.</p>
+
+  <h3 id="p1-aml">1.7 급성골수성백혈병(AML)</h3>
+  <p>AML은 두 계열로 재편되었습니다. <strong>정의적 유전 이상을 가진 AML</strong>과 <strong>분화로 정의된 AML</strong>입니다. 후자는 과거 "AML, NOS" 아래 나열되던 형태학적 유형들을 대체하며, "NOS"라는 혼란스러운 용어를 없앴습니다.</p>
+  </div>
+
+  <div class="tablewrap measure">
+    <table>
+      <caption>표 3. 정의적 유전 이상을 가진 AML과 모세포 기준</caption>
+      <thead><tr><th>유형</th><th>모세포 20% 필요?</th><th>주요 포인트</th></tr></thead>
+      <tbody>
+        <tr><td>APL with <i>PML</i>::<i>RARA</i></td><td>아니오</td><td>기준 대체로 유지, MRD의 중요성 강조</td></tr>
+        <tr><td><i>RUNX1</i>::<i>RUNX1T1</i>, <i>CBFB</i>::<i>MYH11</i></td><td>아니오</td><td>예후 인자가 <i>KIT</i>에서 추가 세포유전 특징과 관해유도 후 MRD로 확장</td></tr>
+        <tr><td><i>DEK</i>::<i>NUP214</i>, <i>RBM15</i>::<i>MRTFA</i></td><td>아니오</td><td><i>MRTFA</i>는 과거 <i>MKL1</i></td></tr>
+        <tr><td><i>BCR</i>::<i>ABL1</i></td><td><strong>예</strong></td><td>CML 골수성 급성기와의 중복을 피하기 위해</td></tr>
+        <tr><td><i>KMT2A</i> 재배열</td><td>아니오</td><td>80개 이상 파트너. <i>MLLT3, AFDN, ELL, MLLT10</i>이 흔함. 파트너 확인은 필수 아니나 권장</td></tr>
+        <tr><td><i>MECOM</i> 재배열</td><td>아니오</td><td>20% 미만이어도 고모세포 사례와 임상상이 유사</td></tr>
+        <tr><td><i>NUP98</i> 재배열</td><td>아니오</td><td>통상 핵형검사에서 잠복(cryptic)인 경우가 많음</td></tr>
+        <tr><td><i>NPM1</i> 돌연변이</td><td>아니오</td><td>MDS 또는 MDS/MPN로 분류되던 사례가 단기간에 AML로 진행</td></tr>
+        <tr><td><i>CEBPA</i> 돌연변이</td><td><strong>예</strong></td><td>이중대립유전자 또는 bZIP 단일 돌연변이(smbZIP)로 정의 확대</td></tr>
+        <tr><td>AML-MR</td><td><strong>예</strong></td><td>형태학 단독 진단 폐지, 세포유전 기준 갱신, 8개 유전자 돌연변이 기준 신설</td></tr>
+        <tr><td>기타 정의된 유전 변이</td><td>—</td><td>희귀 융합 AML, 예: <i>CBFA2T3</i>::<i>GLIS2</i></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="measure">
+  <p>모세포 절단값을 없앤다는 것은 "아무 숫자나 괜찮다"는 뜻이 아닙니다. 저자들은 형태 소견과 분자 결과를 대조해 해당 정의적 이상이 실제로 질병을 구동하고 있는지 확인하는 <strong>임상병리적 판단</strong>을 요구합니다.</p>
+
+  <h4><i>CEBPA</i>와 <i>RUNX1</i>의 처리</h4>
+  <p><i>CEBPA</i> 정의가 이중대립유전자뿐 아니라 bZIP 영역의 단일 돌연변이로 확장된 것은 70세까지의 소아·성인 코호트에서 smbZIP의 양호 예후가 확인되었기 때문입니다. 반면 <i>RUNX1</i> 돌연변이는 다른 정의적 특징들과 너무 광범위하게 겹쳐 독립 유형을 정의할 특이도가 부족하다고 판단되어, 독립 유형으로 인정되지 않았습니다. 이 결정은 ICC와 다른 지점이며, ELN-2022는 여전히 <i>RUNX1</i>을 불량 위험 표지자로 둡니다.</p>
+
+  <h4>AML, 골수형성이상 관련 (AML-MR)</h4>
+  <p>개정 4판의 "골수형성이상 관련 변화를 동반한 AML"이 AML-MR로 개명되며 세 가지가 바뀌었습니다. 형태학적 이형성만으로는 더 이상 진단할 수 없고, 정의적 세포유전 이상 목록이 갱신되었으며, <strong><i>SRSF2, SF3B1, U2AF1, ZRSR2, ASXL1, EZH2, BCOR, STAG2</i></strong> 여덟 유전자 돌연변이에 기반한 정의가 신설되었습니다. 근거는 이 돌연변이들이 MDS 또는 MDS/MPN 이후 발생한 AML에 95% 이상 특이적으로 나타난다는 Lindsley 등의 관찰입니다. 진단에는 모세포 20% 이상, 골수성 면역표현형, 그리고 이 이상들 중 하나 이상 또는 MDS·MDS/MPN 병력이 필요합니다.</p>
+
+  <div class="box concept">
+    <p class="box-h">개념 보충: 이 여덟 유전자가 중요한 이유</p>
+    <p>이 유전자들은 RNA 스플라이싱(<i>SRSF2, SF3B1, U2AF1, ZRSR2</i>), 염색질 조절(<i>ASXL1, EZH2, BCOR</i>), 코헤신(<i>STAG2</i>) 경로에 속하며, 클론 진화의 비교적 이른 단계에서 획득되어 이형성 조혈의 "유전적 이력"을 기록합니다. WHO는 이를 <em>존재론적</em> 표지(이 AML이 어떤 역사를 가진 질환인가)로 사용했고, ELN-2022는 같은 정보를 <em>예후적</em> 표지(이 환자가 집중 치료 후 얼마나 나쁜가)로 사용했습니다. 두 용도가 같은 결론을 낼 필요는 없으며, 바로 이 점이 II·III부의 핵심 쟁점이 됩니다.</p>
+  </div>
+
+  <h4>분화로 정의된 AML</h4>
+  <p>정의적 유전 이상이 없는 사례를 분화 정도로 분류하며, 분화 표지 기준은 혼합표현형 급성백혈병(MPAL) 및 초기 T전구 림프모구백혈병(ETP-ALL)과 조화되도록 갱신되었습니다. <i>BCL11B</i> 재배열이 T/골수 MPAL, ETP-ALL, 모호계통 백혈병, 미분화 AML 일부에서 공통으로 발견된다는 사실은 이들 사이의 생물학적 연속성을 시사합니다.</p>
+  <ul>
+    <li><strong>급성적백혈병(AEL)</strong>: 대개 골수 세포의 80% 이상이 적혈구계이고 그중 30% 이상이 전적모세포인 경우로 정의되며, 이중대립유전자 <i>TP53</i> 변이가 매우 흔합니다. 80% 미만이어도 같은 임상병리 특징을 보이는 사례가 인정됩니다. AEL 진단은 AML-MR보다 우선합니다.</li>
+    <li><strong>급성거핵모구백혈병(AMKL)</strong>: 다운증후군 소아, 비다운증후군 소아, 성인의 세 임상군에서 발생합니다. 새로 기술된 "RAM 면역표현형"은 <i>CBFA2T3</i>::<i>GLIS2</i>와 상관됩니다.</li>
+    <li><strong>골수육종</strong>: AML 또는 형질전환된 MDS·MDS/MPN·MPN의 조직 기반 발현입니다. 골수 병변과의 분자 일치율은 약 70%이며, 단독 골수육종도 세포유전·분자 검사를 포함해 포괄적으로 평가해야 합니다.</li>
+  </ul>
+
+  <h3 id="p1-secondary">1.8 이차성 골수종양</h3>
+  <p>세포독성 치료 노출이나 생식세포 소인을 배경으로 발생하는 골수종양을 별도 범주로 묶었습니다. 핵심 원칙은 "세포독성 치료 후(post cytotoxic therapy)"와 "생식세포 [유전자] 변이 연관"을 <strong>수식어</strong>로 취급한다는 것입니다. 즉 먼저 다른 장의 기준으로 질환 유형을 완전히 진단한 뒤 수식어를 붙입니다. 예: <i>KMT2A</i> 재배열 AML, 세포독성 치료 후. MPN의 AML 형질전환은 MPN 범주에, MDS·MDS/MPN의 형질전환은 AML-MR에 남습니다.</p>
+  <ul>
+    <li><strong>MN-pCT</strong>: "치료 관련(therapy-related)"을 대체하는 용어입니다. CH가 세포독성 치료의 선택압 아래 확장된다는 이해를 반영합니다. PARP1 억제제 노출이 자격 기준에 추가되고 메토트렉세이트는 제외되었습니다. <i>NPM1</i> 돌연변이나 CBF 백혈병처럼 "de novo 분자 신호"를 가진 사례도 병력 기반으로 이 범주에 넣되, 가능한 가장 구체적인 진단명을 보고서에 함께 적도록 권고합니다. 대부분의 AML-pCT, MDS-pCT는 <i>TP53</i> 돌연변이와 연관되고, 다중 타격일 때 예후가 더 나쁩니다.</li>
+    <li><strong>생식세포 소인 연관</strong>: 골수 질환 표현형과 소인 유전형을 결합하는 공식적 명명법을 사용합니다(예: 생식세포 <i>RUNX1</i> 병적 변이 연관 AML). 임상 양상에 따라 세 아형으로 묶으며, 유전 상담과 가족력 평가가 진단 과정의 기본 요소로 기대됩니다. 다운증후군 관련 골수 증식은 <i>GATA1</i> 엑손 2·3 체세포 돌연변이를 특징으로 하며, 생후 6개월 이내의 일과성 비정상 골수생성(TAM)과 다운증후군 골수성백혈병(ML-DS)으로 구성됩니다.</li>
+  </ul>
+
+  <h3 id="p1-mlntk">1.9 호산구증가 및 티로신키나제 유전자 융합 동반 골수/림프 종양 (MLN-TK)</h3>
+  <p>티로신키나제 도메인이 항시 활성화되는 융합으로 구동되는 <i>BCR</i>::<i>ABL1</i> 음성 종양군입니다. MPN, MDS, MDS/MPN, AML, MPAL, B 또는 T-ALL 등 광범위한 조직형으로 나타나며, 골수 외 병변이 흔하고 호산구증가가 없을 수도 있습니다. 진단 위계상 다른 골수·림프 유형 및 SM보다 우선하며, CEL 진단 전에 반드시 배제해야 합니다.</p>
+  </div>
+
+  <div class="tablewrap measure">
+    <table>
+      <caption>표 4. MLN-TK의 정의적 유전 이상</caption>
+      <thead><tr><th>유형</th><th>대표 이상</th><th>임상·치료적 특징</th></tr></thead>
+      <tbody>
+        <tr><td><i>PDGFRA</i></td><td>4q12 잠복 결실에 의한 <i>FIP1L1</i>::<i>PDGFRA</i></td><td>이매티닙에 극적 반응</td></tr>
+        <tr><td><i>PDGFRB</i></td><td>t(5;12)에 의한 <i>ETV6</i>::<i>PDGFRB</i>, 30개 이상 파트너</td><td>이매티닙에 극적 반응</td></tr>
+        <tr><td><i>FGFR1</i></td><td>8p11 이상</td><td>만성 또는 B·T·골수·혼합 급성기, TKI 반응 가변적</td></tr>
+        <tr><td><i>JAK2</i></td><td><i>PCM1</i> 외 파트너도 확인되어 독립 유형화</td><td>TKI 반응 가변, 장기 생존에는 대개 이식 필요</td></tr>
+        <tr><td><i>FLT3</i></td><td>13q12.2 재배열</td><td>골수 MPN 양상을 동반한 골수육종 또는 호산구증가 T-ALL</td></tr>
+        <tr><td><i>ETV6</i>::<i>ABL1</i></td><td>융합</td><td>B-ALL with <i>ETV6</i>::<i>ABL1</i>과 구분해야 함</td></tr>
+        <tr><td>기타 정의된 TK 융합</td><td>예: <i>ETV6</i>::<i>FGFR2</i>, <i>ETV6</i>::<i>LYN</i></td><td>데이터 축적 시까지 아형으로 등재</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="measure">
+  <h3 id="p1-alal">1.10 혼합 또는 모호 계통 급성백혈병</h3>
+  <p>모호계통 급성백혈병(ALAL)과 MPAL을 하나의 범주로 묶고, 여기서도 <strong>유전적으로 정의된 군</strong>과 <strong>면역표현형으로만 정의된 군</strong>으로 나누었습니다. 새 유전 아형은 두 가지입니다.</p>
+  <ul>
+    <li><strong><i>ZNF384</i> 재배열 MPAL</strong>: 주로 B/골수 표현형이며 소아 B/골수 MPAL의 약 50%를 차지합니다(파트너: <i>TCF3, EP300, TAF15, CREBBP</i>). <i>ZNF384</i> 재배열 B-ALL과 전사체가 유사해 생물학적 연속체를 시사합니다.</li>
+    <li><strong><i>BCL11B</i> 재배열 ALAL</strong>: 미분화 급성백혈병과 T/골수 MPAL의 약 20–30%, 그리고 ETP-ALL의 약 20–30%에서 발견됩니다. 줄기세포·골수·T세포 특징이 공존하는 스펙트럼입니다.</li>
+  </ul>
+  <p>계통 결정 원칙도 정교해졌습니다. 항원 발현의 <strong>강도와 패턴</strong>이 해당 계통의 정상 세포 집단과 비슷할수록 계통 귀속의 근거가 강하며, 같은 계통의 여러 항원이 조화롭게 발현될수록 특이도가 높아집니다(예: CD19, CD22, CD10의 동시 발현). 골수과산화효소(MPO)의 유세포분석 양성 역치는 연구마다 3–28%로 다양하며, 세포화학에서 쓰던 3%는 민감도는 높지만 특이도가 낮고, 10% 초과가 특이도를 개선하는 것으로 보이나 합의된 절단값은 없다고 정리합니다.</p>
+
+  <h3 id="p1-histio">1.11 조직구·수지상세포 종양</h3>
+  <p>공통 골수 전구세포에서 유래한다는 개체발생적 근거에 따라 골수성 종양 바로 뒤에 배치되었습니다. 변화는 세 가지입니다. 클론성 형질세포양 수지상세포(pDC) 질환이 이 범주에 들어왔고, 여포수지상세포 육종과 섬유모세포 망상세포 종양은 "림프조직 기질 유래 종양"이라는 별도 장으로 옮겨졌으며, Rosai-Dorfman 병(RDD)과 ALK 양성 조직구증이 새 유형으로 추가되었습니다.</p>
+  <ul>
+    <li><strong>골수종양 연관 성숙 pDC 증식(MPDCP)</strong>: RAS 경로 돌연변이를 가진 골수증식형 CMML에서 클론성 pDC가 골수에 축적되며, AML에서도 CD34 양성 모세포와 같은 돌연변이 지형을 공유하는 pDC 확장이 관찰되고 흔히 <i>RUNX1</i> 돌연변이와 연관됩니다.</li>
+    <li><strong>BPDCN</strong>: 기본 틀은 유지하되 면역표현형 진단 기준이 정교화되었습니다.</li>
+    <li><strong>MAPK 경로의 수렴</strong>: 랑게르한스세포 조직구증, Erdheim-Chester 병, 연소성 황색육아종, RDD, 조직구 육종은 <i>BRAF, ARAF, MAP2K1, NRAS, KRAS</i> 등의 돌연변이를 공유하며, BRAF·MEK 억제제라는 표적치료 기회를 제공합니다.</li>
+    <li><strong>ALK 양성 조직구증</strong>: 가장 흔한 융합은 <i>KIF5B</i>::<i>ALK</i>이며 ALK 억제제에 현저히 반응합니다. 영아의 다장기 전신형(간·비장·골수 침범)과 모든 연령의 다장기·단일장기형(특히 신경계와 피부)이 있습니다. 형태가 연소성 황색육아종과 겹치므로, 정의된 실체에 맞지 않는 조직구 증식에는 ALK 면역염색을 권고합니다.</li>
+    <li><strong>전환분화(transdifferentiation)</strong>: 여포림프종, CLL, T 또는 B-ALL에 동반·후속하는 조직구 종양은 림프종과 같은 클론 표지를 공유하면서 각자 고유한 추가 변이도 가지므로, 공통 림프 전구 클론에서의 분기 분화가 제안됩니다.</li>
+  </ul>
+
+  <h3 id="p1-syndrome">1.12 골수종양 소인을 가진 유전성 종양 증후군</h3>
+  <p>판코니 빈혈은 21개 이상의 BRCA-판코니 DNA 복구 경로 유전자 변이로 발생하며, 이번 분류는 모세포 비율, 혈구감소, 염색체 이상에 따라 다섯 가지 혈액학적 범주를 구분합니다. 과립구·거핵구 이형성은 진행의 조직학적 지표입니다. RASopathy에서는 MAPK 과활성화가 골수세포 증식을 일으키며, <i>NF1, NRAS, KRAS, PTPN11, CBL</i> 분석이 대부분의 JMML 진단에 도움이 됩니다.</p>
+
+  <h3 id="p1-critique">1.13 비판적 고찰: WHO-HAEM5와 ICC의 병존</h3>
+  <p>이 리뷰는 WHO 내부의 논리를 서술하지만, 실제 진료에서는 같은 해 Arber 등이 <i>Blood</i>에 발표한 ICC와 함께 읽어야 합니다. 아래 비교는 논문 I 본문이 아니라 ICC 원문(Arber DA 외, Blood 2022)에 근거한 보충 설명입니다.</p>
+  </div>
+
+  <div class="tablewrap measure">
+    <table>
+      <caption>표 5. WHO-HAEM5와 ICC 2022의 주요 차이 (보충)</caption>
+      <thead><tr><th>쟁점</th><th>WHO-HAEM5</th><th>ICC 2022</th></tr></thead>
+      <tbody>
+        <tr><td>재발성 유전 이상 AML의 모세포 기준</td><td>대부분 기준 없음 (단 <i>BCR</i>::<i>ABL1</i>, <i>CEBPA</i>, AML-MR은 20%)</td><td>대부분 10% 이상 (<i>BCR</i>::<i>ABL1</i>은 20%)</td></tr>
+        <tr><td>모세포 10–19% 영역</td><td>MDS-IB2 유지</td><td>MDS/AML 범주 신설</td></tr>
+        <tr><td><i>TP53</i></td><td>MDS-bi<i>TP53</i> (MDS 내 유형)</td><td>모세포 범위를 가로지르는 <i>TP53</i> 돌연변이 골수종양 범주 (MDS, MDS/AML, AML)</td></tr>
+        <tr><td>MR 유전자 목록</td><td>8개 (<i>RUNX1</i> 제외)</td><td>9개 (<i>RUNX1</i> 포함)</td></tr>
+        <tr><td><i>CEBPA</i></td><td>이중대립유전자 또는 smbZIP</td><td>bZIP 인프레임 돌연변이</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="measure">
+  <div class="box critique">
+    <p class="box-h">비판적 고찰</p>
+    <p>첫째, 모세포 절단값을 없앤 WHO의 결정은 생물학적으로 일관되지만, 실무에서는 "정의적 이상이 질병을 구동하는지"에 대한 판단을 병리의사에게 넘기므로 기관 간 재현성의 부담이 커집니다. 둘째, 두 분류가 병존하면서 임상시험 등록 기준, 암 등록 통계, 메타분석의 비교 가능성이 떨어졌습니다. 셋째, 분류가 점점 분자 검사에 의존하면서 자원 제한 환경과의 격차가 생길 수 있는데, WHO는 계열 수준 회귀라는 구조적 장치로 이를 완화하려 했다는 점이 평가할 만합니다. 넷째, AML-MR 정의에 MR 유전자를 넣은 것은 "질환의 역사"를 표지하는 존재론적 결정이지, 해당 돌연변이가 예후적으로 불량하다는 주장과는 논리적으로 독립적입니다. 이 구분을 놓치면 II부의 논쟁을 잘못 해석하게 됩니다.</p>
+  </div>
+  </div>
+</section>
+
+<!-- ============ PART II ============ -->
+<section class="part measure" id="p2">
+  <h2>II. ELN-2022 검증과 정교화: 독일 AMLCG 코호트</h2>
+  <p class="part-sub">Rausch C 외, <i>Leukemia</i> 2023;37:1234–1244 · LMU 뮌헨 및 라이프치히 그룹</p>
+
+  <h3 id="p2-bg">2.1 ELN-2022의 변경점</h3>
+  <p>ELN은 2010년 첫 권고 이후 2017년 세포유전·분자 이상 기반 위험층화를 발표했고, 이 체계는 집중 치료 코호트에서 반복 검증되어 진료와 임상시험에 널리 채택되었습니다. 2022년판은 여러 변경을 도입했는데, 저자들이 정리한 핵심은 다음과 같습니다.</p>
+  <ul>
+    <li><strong><i>FLT3</i>-ITD</strong>: CBF 재배열이나 불량 표지가 없으면, 대립유전자비(allelic ratio, AR)나 <i>NPM1</i> 동반 여부와 무관하게 중간위험입니다. FLT3 억제제의 효과를 반영하는 동시에, 일부 검증 연구에서 AR 고·저에 따른 결과 차이가 없었다는 점에 근거합니다. 다만 저자들 자신의 ELN-2017 검증에서는 AR이 층화를 개선했었다는 점을 함께 밝힙니다.</li>
+    <li><strong><i>CEBPA</i></strong>: 단독이든 두 번째 돌연변이와 동반이든, bZIP 도메인의 인프레임 돌연변이(<i>CEBPA</i><sup>bZIP-inf</sup>)만 양호 위험으로 봅니다.</li>
+    <li><strong>불량 위험 추가</strong>: t(8;16)(p11;p13)/<i>KAT6A</i>::<i>CREBBP</i>, t(3q26.2;v)/<i>MECOM</i> 재배열, 그리고 양호 표지가 없을 때의 <i>BCOR, EZH2, SF3B1, SRSF2, STAG2, U2AF1, ZRSR2</i> 돌연변이입니다.</li>
+  </ul>
+  <p>각 변경은 개별적으로 근거가 있지만, 이들이 합쳐졌을 때 전체 위험층화가 어떻게 달라지는지는 대규모의 균질하게 치료된 코호트에서 검증되지 않았다는 것이 연구의 출발점입니다.</p>
+
+  <h3 id="p2-methods">2.2 코호트와 방법론</h3>
+  <div class="tablewrap">
+    <table>
+      <caption>표 6. Rausch 연구의 설계 요약</caption>
+      <tbody>
+        <tr><th>발견 코호트</th><td>독일 AML Cooperative Group 3상 시험 두 개: AMLCG-1999 (n=864), AMLCG-2008 (n=274), 1999–2012년 등록. 총 1,138명 중 유전 데이터 결측 20명 제외 → <strong>1,118명</strong></td></tr>
+        <tr><th>연령</th><td>중앙값 58세 (18–86세). 상한 연령 없이 집중 치료 적합자</td></tr>
+        <tr><th>치료</th><td>시타라빈 기반 관해유도. FLT3 억제제와 젬투주맙 오조가미신은 1차 치료에서 사용되지 않음</td></tr>
+        <tr><th>유전 분석</th><td>중앙 판독 중기 세포유전, 68개 골수성 유전자 표적 염기서열 분석, 검출 한계 VAF 2%</td></tr>
+        <tr><th>추적</th><td>생존자 추적 중앙값 98개월</td></tr>
+        <tr><th>검증 코호트</th><td>AMLSG 임상시험 1,160명 (83%가 60세 미만), Papaemmanuil 등 NEJM 2016 공개 데이터</td></tr>
+        <tr><th>통계</th><td>Fisher 정확검정, Wilcoxon 순위합, Kaplan–Meier, 이식 분석에는 Simon–Makuch 도표, 로그순위검정, CR에 대한 다변량 로지스틱 회귀, 생존에 대한 Cox 비례위험 모형 (시험군으로 층화), AIC 기반 모형 선택, VIF로 공선성 점검, 시간의존 ROC, Harrell C-index. R 4.2.1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box concept">
+    <p class="box-h">개념 보충: Simon–Makuch 도표를 쓴 이유</p>
+    <p>이식은 관해 이후 일정 시간이 지나야 시행되므로, 이식 여부로 환자를 기저 시점부터 나누면 "이식까지 살아남은" 기간이 이식군에 공짜로 더해지는 불멸 시간 편향(immortal time bias)이 생깁니다. Simon–Makuch 방법과 시간의존 공변량 Cox 모형은 이식 시점 이전에는 환자를 비이식군에, 이후에는 이식군에 기여하도록 처리해 이 편향을 줄입니다. III부의 Song 연구도 Mantel–Byar 검정으로 같은 문제를 다룹니다.</p>
+  </div>
+
+  <h3 id="p2-results">2.3 주요 결과</h3>
+  <h4>위험군 분포와 인구학적 연관</h4>
+  <p>ELN-2022 기준으로 양호 363명(32%), 중간 302명(27%), 불량 453명(41%)이었습니다. 60세 미만(n=600)에서는 39/30/31%, 60세 이상(n=518)에서는 25/24/52%로 고령일수록 불량군이 많았습니다. ELN-2022 불량 위험은 고령, 남성, 이차성 AML(sAML), 진단 시 낮은 WBC와 유의하게 연관되었고, 치료 관련 AML(tAML)과는 연관되지 않았습니다(p=0.21).</p>
+  <p>특히 흥미로운 것은 <strong>성별 차이</strong>입니다. 남성의 불량 위험 비율은 48%로 여성 33%보다 높았는데(p&lt;0.0001), 이는 남성에서 <i>NPM1</i> 돌연변이가 적고 <i>RUNX1</i>, <i>ASXL1</i> 돌연변이가 많기 때문이며, 새로 추가된 MR 돌연변이 중 <i>EZH2, SRSF2, STAG2, U2AF1, ZRSR2</i>도 남성과 유의하게 연관되어 이 차이를 증폭했습니다. 참고로 <i>ZRSR2</i>와 <i>STAG2</i>, <i>BCOR</i>는 X 염색체 유전자라는 점에서 이 성별 연관은 생물학적으로도 그럴듯합니다.</p>
+
+  <h4>ELN-2017과의 일치도</h4>
+  <p>85%가 같은 위험군에 머물렀고, 15%(n=171)가 재분류되었습니다. 이 중 3%는 더 양호한 쪽으로, 12%는 더 불량한 쪽으로 이동했습니다. Cohen kappa는 비가중 0.73, 가중 0.84로 상당한 일치를 보였습니다.</p>
+  <div class="box critique">
+    <p class="box-h">세부 검토 포인트</p>
+    <p>논문은 비가중 kappa 0.73의 95% 신뢰구간을 0.77–0.80, 가중 kappa 0.84의 구간을 0.87–0.89로 보고하는데, 두 구간 모두 점추정치를 포함하지 않습니다. 이는 보고 오류일 가능성이 높으며, 원문 인용 시 점추정치만 사용하거나 주의를 표시하는 것이 안전합니다.</p>
+  </div>
+
+  <h4>위험군별 치료 결과</h4>
+  <div class="tablewrap">
+    <table>
+      <caption>표 7. ELN-2022와 ELN-2017의 위험군별 결과 (n=1,118)</caption>
+      <thead><tr><th>지표</th><th class="r">2022 양호</th><th class="r">2022 중간</th><th class="r">2022 불량</th><th class="r">2017 양호</th><th class="r">2017 중간</th><th class="r">2017 불량</th></tr></thead>
+      <tbody>
+        <tr><td>완전관해(CR)</td><td class="r">73%</td><td class="r">66%</td><td class="r">45%</td><td class="r">72%</td><td class="r">66%</td><td class="r">41%</td></tr>
+        <tr><td>5년 RFS</td><td class="r">52%</td><td class="r">32%</td><td class="r">16%</td><td class="r">53%</td><td class="r">26%</td><td class="r">12%</td></tr>
+        <tr><td>5년 OS</td><td class="r">55%</td><td class="r">34%</td><td class="r">15%</td><td class="r">54%</td><td class="r">31%</td><td class="r">12%</td></tr>
+        <tr><td>OS 중앙값 (년)</td><td class="r">9.5</td><td class="r">1.7</td><td class="r">0.8</td><td class="r">8.2</td><td class="r">1.7</td><td class="r">0.8</td></tr>
+        <tr><td>RFS 중앙값 (년)</td><td class="r">7.2</td><td class="r">1.0</td><td class="r">0.7</td><td class="r">7.1</td><td class="r">1.0</td><td class="r">0.6</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>ELN-2022는 두 연령군 모두에서 예후 영향력을 유지했습니다. 다변량 분석에서 ELN-2022 불량 위험, 고령, 높은 WBC, sAML 또는 tAML은 CR 가능성 감소와 연관되었고, 불량 위험·고령·높은 WBC는 짧은 RFS 및 OS와, 양호 위험은 긴 RFS와 연관되었습니다. tAML은 OS 단축과 추가로 연관되었습니다.</p>
+  <p>그러나 판별력 지표는 다른 이야기를 합니다. 시간의존 ROC 곡선 아래 면적은 ELN-2022가 수치적으로 더 낮았고 일부 시점에서는 유의하게 낮았습니다. 연령, 성별, AML 유형을 보정한 OS의 Harrell C-index는 <strong>ELN-2022 0.658, ELN-2017 0.664</strong>로 새 체계가 약간 낮았습니다. 불량군의 생존이 ELN-2017보다 좋아진 것은 불량군에 상대적으로 덜 나쁜 환자들이 섞여 들어갔다는 신호이며, 저자들은 이를 재분류 하위군 분석으로 추적합니다.</p>
+
+  <h4>재분류 하위군의 결과</h4>
+  <div class="tablewrap">
+    <table>
+      <caption>표 8. 재분류 경로별 5년 OS 비교</caption>
+      <thead><tr><th>이동 경로</th><th class="r">n</th><th>비교 대상</th><th class="r">5년 OS</th><th class="r">p</th></tr></thead>
+      <tbody>
+        <tr><td>2017 불량·중간 → 2022 양호</td><td class="r">12</td><td colspan="3">표본이 작아 정식 분석 불가</td></tr>
+        <tr><td>2017 양호 → 2022 중간</td><td class="r">61</td><td>나머지 2022 중간</td><td class="r">48% vs 33%</td><td class="r">0.307</td></tr>
+        <tr><td>2017 불량 → 2022 중간</td><td class="r">21</td><td>나머지 2022 중간</td><td class="r">10% vs 33%</td><td class="r">0.068</td></tr>
+        <tr><td>2017 중간 → 2022 불량</td><td class="r">68</td><td>나머지 2022 불량</td><td class="r">25% vs 12%</td><td class="r">0.007</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>양호에서 중간으로 내려온 환자와 불량에서 중간으로 올라온 환자 사이의 OS 차이도 유의했습니다(p=0.016). 즉 ELN-2022 중간위험군 내부에는 예후가 서로 다른 두 하위집단이 섞여 있고, 불량위험군에는 덜 나쁜 하위집단이 유입되었습니다.</p>
+
+  <h4>관해 후 치료와 이식</h4>
+  <p>관해에 도달한 665명 중 109명이 첫 관해기에 alloSCT를 받았습니다(60세 미만 97명, 이상 12명). 고령에서 이식이 드물었으므로 60세 미만 CR1 환자 381명만 분석했는데, 이 코호트가 분자 기반 점수 도입 이전에 모집되었음에도 이식 비율은 위험군에 따라 18%, 30%, 34%로 달랐습니다. 이식을 시간의존 공변량으로 둔 모형에서 RFS는 모든 위험군에서 수치적으로 이식이 우세했지만 양호(p=0.0028)와 불량(p=0.024)에서만 유의했고, OS 이득은 불량위험군에서만 유의했습니다(p=0.032). 저자들은 무작위 배정이 아니어서 동반질환이나 수행능력 등 다른 요인의 편향 가능성을 인정합니다.</p>
+
+  <h3 id="p2-mr">2.4 MR 돌연변이 논쟁: 이 논문의 핵심 주장</h3>
+  <p>재분류된 환자의 45%에 해당하는 79명은 새 MR 돌연변이 때문에 ELN-2017 양호(11명) 또는 중간(68명)에서 ELN-2022 불량으로 이동했습니다. 이 환자들은 고령(79명 중 46명이 60세 이상)과 남성(48명)에 치우쳐 있었습니다.</p>
+  <div class="tablewrap">
+    <table>
+      <caption>표 9. MR 돌연변이로 불량위험에 재배정된 환자의 결과</caption>
+      <thead><tr><th>코호트</th><th>비교</th><th class="r">5년 OS</th><th class="r">OS 중앙값</th><th class="r">p</th><th>중간위험군과 비교</th></tr></thead>
+      <tbody>
+        <tr><td>AMLCG (발견)</td><td>MR 재배정 (n=79) vs 기타 불량</td><td class="r">26% vs 12%</td><td class="r">1.7 vs 0.7년</td><td class="r">0.0004</td><td>유의차 없음 (OS p=0.34, RFS p=0.91)</td></tr>
+        <tr><td>AMLCG RFS</td><td>같은 비교</td><td class="r">25% vs 12%</td><td class="r">1.5 vs 0.6년</td><td class="r">0.0035</td><td>—</td></tr>
+        <tr><td>AMLSG (검증)</td><td>MR 재배정 vs 기타 불량</td><td class="r">30% vs 18%</td><td class="r">1.6 vs 1.0년</td><td class="r">0.0052</td><td>중간위험보다 <strong>유의하게 나쁨</strong> (p=0.02)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>발견 코호트에서 MR 재배정 환자는 <i>ASXL1, RUNX1, TP53</i> 등 다른 불량 유전형보다 명확히 좋았고 중간위험군과는 차이가 없었습니다. 저자들은 이로부터 "다른 기존 불량 표지가 없을 때 MR 돌연변이는 집중 치료를 받는 젊은 환자나 고령 환자 모두에서 불량 결과의 주요 독립 동인이 아니며, 중간위험으로 분류하는 편이 더 적절할 수 있다"고 결론짓습니다.</p>
+  <p>다만 검증 코호트는 이 결론을 절반만 지지합니다. 다른 불량군보다는 좋았지만 중간군보다는 나빴기 때문입니다. 저자들도 이것이 결론에 뉘앙스를 더하지만 MR 환자를 다른 불량군과 묶는 것을 명확히 지지하지는 않는다고 해석합니다. 엄밀히 말하면 두 코호트의 결과를 함께 놓으면 MR 돌연변이 군은 <strong>중간과 불량 사이 어딘가</strong>에 위치하는 것으로 보는 것이 가장 정직한 요약입니다. MR 돌연변이 환자는 CR1 이식에서 특히 큰 이득을 보이는 듯했지만(OS p=0.0026) 이식 환자가 6명뿐이어서 결론을 내릴 수 없습니다.</p>
+
+  <h3 id="p2-flt3">2.5 <i>FLT3</i>-ITD 대립유전자비의 제거</h3>
+  <p>AR을 제거하자 대부분의 <i>FLT3</i>-ITD 환자가 중간위험이 되었고, 이들의 5년 OS는 다른 중간위험 환자와 같았습니다(35% vs 34%). 중간위험군 안에서 AR 저(n=78, 5년 OS 45%)와 고(n=126, 27%)는 경향성 차이만 보였습니다(p=0.097). 그러나 불량위험군 안에서는 AR 고(n=43, 10%)가 저(n=42, 25%)보다 유의하게 나빴습니다(p=0.027). 저자들은 FLT3 억제제 이전 시대 코호트임에도 AR 제거를 대체로 지지하며, 억제제를 쓰면 ITD의 불량 효과가 더 줄어들 것으로 예상합니다.</p>
+
+  <h3 id="p2-refine">2.6 추가 표지 없이 가능한 5단계 정교화 제안</h3>
+  <p>저자들은 ELN-2017 검증 때의 제안을 이어, 이미 분류에 포함된 표지만으로 양 극단을 분리하자고 제안합니다.</p>
+  <ul>
+    <li><strong>매우 양호(very favorable)</strong>: <i>CBFB</i>::<i>MYH11</i> 또는 <i>CEBPA</i><sup>bZIP-inf</sup>이면서 중간·불량 세포유전 변화가 없는 경우. n=89 (8%). 이 하위군의 5년 OS는 각각 71%와 60%로, <i>RUNX1</i>::<i>RUNX1T1</i>(50%)이나 <i>FLT3</i> 돌연변이 없는 <i>NPM1</i> 돌연변이(51%)보다 높았습니다.</li>
+    <li><strong>매우 불량(very adverse)</strong>: 복합핵형과 <i>TP53</i> 돌연변이를 동시에 가진 경우. n=62 (6%). 5년 RFS와 OS가 모두 0%였습니다.</li>
+  </ul>
+
+  <div class="figure" role="figure" aria-labelledby="fig1-title">
+    <p class="fig-title" id="fig1-title">그림 1. 정교화된 ELN-2022 5단계의 완전관해율과 5년 전체생존율 (AMLCG, n=1,118)</p>
+    <svg viewBox="0 0 620 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="매우 양호 CR 76% OS 65%, 양호 CR 72% OS 51%, 중간 CR 67% OS 34%, 불량 CR 47% OS 17%, 매우 불량 CR 27% OS 0%">
+      <g font-size="12" fill="var(--muted)">
+        <line x1="170" y1="10" x2="170" y2="215" stroke="var(--rule)"/>
+        <line x1="270" y1="10" x2="270" y2="215" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="370" y1="10" x2="370" y2="215" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="470" y1="10" x2="470" y2="215" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="570" y1="10" x2="570" y2="215" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <text x="170" y="232" text-anchor="middle">0%</text>
+        <text x="270" y="232" text-anchor="middle">25%</text>
+        <text x="370" y="232" text-anchor="middle">50%</text>
+        <text x="470" y="232" text-anchor="middle">75%</text>
+        <text x="570" y="232" text-anchor="middle">100%</text>
+      </g>
+      <g font-size="13" fill="var(--ink)">
+        <text x="160" y="32" text-anchor="end">매우 양호 (n=89)</text>
+        <text x="160" y="74" text-anchor="end">양호</text>
+        <text x="160" y="116" text-anchor="end">중간</text>
+        <text x="160" y="158" text-anchor="end">불량</text>
+        <text x="160" y="200" text-anchor="end">매우 불량 (n=62)</text>
+      </g>
+      <!-- OS bars -->
+      <rect x="170" y="18" width="260" height="15" fill="var(--vfav)"/>
+      <rect x="170" y="60" width="204" height="15" fill="var(--fav)"/>
+      <rect x="170" y="102" width="136" height="15" fill="var(--int)"/>
+      <rect x="170" y="144" width="68" height="15" fill="var(--adv)"/>
+      <rect x="170" y="186" width="2" height="15" fill="var(--vadv)"/>
+      <!-- CR bars -->
+      <rect x="170" y="36" width="304" height="7" fill="none" stroke="var(--vfav)" stroke-width="1.5"/>
+      <rect x="170" y="78" width="288" height="7" fill="none" stroke="var(--fav)" stroke-width="1.5"/>
+      <rect x="170" y="120" width="268" height="7" fill="none" stroke="var(--int)" stroke-width="1.5"/>
+      <rect x="170" y="162" width="188" height="7" fill="none" stroke="var(--adv)" stroke-width="1.5"/>
+      <rect x="170" y="204" width="108" height="7" fill="none" stroke="var(--vadv)" stroke-width="1.5"/>
+      <g font-size="12" fill="var(--ink)">
+        <text x="436" y="30">OS 65%</text><text x="480" y="44" fill="var(--muted)">CR 76%</text>
+        <text x="380" y="72">OS 51%</text><text x="464" y="86" fill="var(--muted)">CR 72%</text>
+        <text x="312" y="114">OS 34%</text><text x="444" y="128" fill="var(--muted)">CR 67%</text>
+        <text x="244" y="156">OS 17%</text><text x="364" y="170" fill="var(--muted)">CR 47%</text>
+        <text x="178" y="198">OS 0%</text><text x="284" y="212" fill="var(--muted)">CR 27%</text>
+      </g>
+    </svg>
+    <p class="fig-cap">굵은 막대는 5년 OS, 얇은 윤곽 막대는 CR률입니다. 원문 보고 수치로 재구성했습니다.</p>
+  </div>
+
+  <p>다변량 분석에서 매우 불량군은 불량군보다 CR률, RFS, OS가 모두 나빴습니다. 매우 양호군은 양호군보다 OS가 길었지만 CR률과 RFS는 다르지 않았고, 이 OS 차이는 <strong>재발 후 생존</strong>에서 비롯되었습니다(p=0.002). 이는 <i>CEBPA</i> 돌연변이 AML이 구제요법에 특히 잘 반응한다는 기존 보고와 일치합니다. 검증 코호트에서도 매우 양호와 양호의 OS 차이는 경향성(5년 77% vs 58%, p=0.06), 매우 불량과 불량의 차이는 뚜렷했습니다(0% vs 24%, p&lt;0.0001).</p>
+
+  <div class="box concept">
+    <p class="box-h">개념 보충: 재발 후 생존이 말해주는 것</p>
+    <p>OS 차이가 RFS가 아닌 재발 후 생존에서 생긴다는 것은, 매우 양호군이 "덜 재발해서"가 아니라 "재발해도 다시 관해시킬 수 있어서" 오래 산다는 뜻입니다. 이는 첫 관해기 이식의 필요성을 낮추는 논거가 됩니다. 재발해도 구제 후 이식이라는 선택지가 효과적으로 남아 있기 때문입니다.</p>
+  </div>
+
+  <h3 id="p2-critique">2.7 강점과 한계 평가</h3>
+  <p><strong>강점</strong>은 넓은 연령대에 걸쳐 시타라빈·안트라사이클린 기반 관해유도를 균일하게 받은 대규모 코호트라는 점, 중앙 세포유전 판독과 68개 유전자 패널, 98개월의 긴 추적, 그리고 독립 검증 코호트입니다.</p>
+  <p><strong>한계</strong>는 저자들이 명시한 것과 추가로 생각할 것으로 나눌 수 있습니다.</p>
+  <ul>
+    <li>젬투주맙 오조가미신, 미도스타우린, CPX-351 등 현재 1차 표준에 포함된 신약을 받은 환자가 없습니다. 이 약제들은 특정 유전 하위군의 결과를 바꾸므로, ELN 체계 자체와 이 검증 모두 그런 하위군 특이적 효과를 반영하지 못합니다.</li>
+    <li>연령 중앙값 58세는 전체 AML 환자보다 약 10년 젊어, 저강도 치료를 받는 고령 환자에게 일반화할 수 없습니다. 아자시티딘·베네토클락스 치료 환자에서 ELN-2017의 예후 분리가 약하다는 보고도 인용됩니다.</li>
+    <li>(추가 고찰) 진단은 WHO 2008 기준으로 이루어졌으므로, WHO-HAEM5 기준이었다면 일부 환자의 진단 범주가 달라졌을 수 있습니다.</li>
+    <li>(추가 고찰) C-index 차이 0.006은 작고 신뢰구간이 보고되지 않아, "약간 나쁜 판별력"이 통계적으로 의미 있는지 판단하기 어렵습니다.</li>
+    <li>(추가 고찰) MR 하위군 분석은 사후(post hoc) 비교이고, 발견과 검증 코호트의 결과가 중간위험과의 비교에서 엇갈렸습니다.</li>
+  </ul>
+  <p>저자들은 결론적으로 특정 치료 하나의 과거 결과를 반영하는 <strong>예후</strong> 분류에서, 서로 다른 치료 전략의 기대 결과를 비교할 수 있는 <strong>예측(predictive)</strong> 모형으로 이동해야 한다고 주장하며, 지역별 약제 접근성까지 고려하는 지속 갱신형 모형과 머신러닝 기반 접근(Gerstung 2017의 knowledge bank, Tazi 2022)을 언급합니다.</p>
+</section>
+
+<!-- ============ PART III ============ -->
+<section class="part measure" id="p3">
+  <h2>III. ELN-2022 검증: 한국 다기관 실제 임상 코호트</h2>
+  <p class="part-sub">Song GY, Kim HJ, Kim T 외, <i>Scientific Reports</i> 2024;14:8517 · 화순전남대병원 주도, 토론토 Princess Margaret과 공동</p>
+
+  <h3 id="p3-design">3.1 연구 설계</h3>
+  <p>이 연구는 ELN-2022가 ELN-2017보다 실용적인지에 대한 연구가 부족하다는 문제의식에서 출발해, 두 판의 차이와 새 체계가 실제 진료를 얼마나 잘 반영하는지를 확인하고자 했습니다. 서론에서 정리한 ELN-2022 변경점은 Rausch 연구와 대부분 겹치지만, 몇 가지를 추가로 강조합니다. AR 제외의 이유로 측정 표준화의 방법론적 어려움을 들고, <i>NPM1</i> 돌연변이 AML에서 불량 세포유전 이상이 동반되면 불량으로 분류되며, 다염색체 삼염색체를 가진 고배수체 핵형이 더 이상 불량으로 간주되지 않는다는 점입니다.</p>
+  <div class="tablewrap">
+    <table>
+      <caption>표 10. Song 연구의 설계 요약</caption>
+      <tbody>
+        <tr><th>대상</th><td>1998–2014년 신규 진단 AML (APL 제외), 18세 이상, <strong>624명</strong>, 연령 중앙값 51세 (18–84)</td></tr>
+        <tr><th>코호트 구성</th><td>기존 연구 코호트의 결합: CBF AML (n=87), 이식 후 MRD 모니터링 (n=104), 이차형 돌연변이 AML (n=394). 중복 79명은 한 번만 계수, 미포함 기관 환자 118명 추가</td></tr>
+        <tr><th>치료</th><td>표준 "7+3" (안트라사이클린 3일 + Ara-C 또는 BHAC 7일), CR 후 공고요법. 양호 세포유전(t(8;21), inv(16), t(16;16))은 이식하지 않고, 나머지는 공여자가 있으면 이식을 목표로 함. 분자 유전 인자는 당시 권고되지 않아 이식 결정에 반영되지 않음</td></tr>
+        <tr><th>유전 분석</th><td>45개 재발성 구동 유전자 표적 심층 염기서열 분석 (Agilent 프로브, Illumina HiSeq 2000), VAF 2% 이상 양성. ENA 기탁 번호 PRJEB49203</td></tr>
+        <tr><th>종점 정의</th><td>OS (진단~사망), EFS (진단~혈액학적 재발 또는 사망), RFS (CR~재발 또는 사망)</td></tr>
+        <tr><th>통계</th><td>역 Kaplan–Meier로 추적 중앙값 산출, 쌍별 로그순위검정, Cox 모형 (Enter 방식, 단변량 p&lt;0.05 변수 투입), 공선성과 비례위험 가정 점검 (STATA), 이식 시점 중도절단 민감도 분석, 시간의존 공변량 Cox와 Mantel–Byar 검정 (EZR), C-index 비교 (compareC), NRI (nricens)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="p3-results">3.2 재분류와 생존</h3>
+  <p>ELN-2022에 따라 양호 205명(32.9%), 중간 295명(47.3%), 불량 124명(19.9%)으로 분류되었습니다. 세 군 사이에 연령, 질환 유형, 이식 환자 수의 차이는 없었습니다. 전체 CR률은 83.8%(523명)였고 위험군별로 92.2%, 85.4%, 66.1%였으며, CR 환자 중 235명(44.9%)이 이식을 받았고 이식 비율은 군 간 차이가 없었습니다.</p>
+  <p>생존자 추적 중앙값은 84.4개월, 전체 5년 OS 39.4%, 5년 EFS 35.5%, CR 환자의 5년 RFS 42.5%였습니다. ELN-2017과 ELN-2022 모두 세 군 사이의 OS, EFS, RFS를 유의하게 분리했습니다.</p>
+
+  <div class="tablewrap">
+    <table>
+      <caption>표 11. ELN-2017에서 ELN-2022로의 재분류 (전체 134명, 21.5%)</caption>
+      <thead><tr><th>ELN-2017</th><th class="r">n</th><th class="r">→ 2022 양호</th><th class="r">→ 2022 중간</th><th class="r">→ 2022 불량</th><th>재분류 원인</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip fav">양호</span></td><td class="r">218</td><td class="r">184</td><td class="r">31</td><td class="r">3</td><td>모두 <i>NPM1</i> 돌연변이 + <i>FLT3</i>-ITD 저 AR. 3명은 MR 돌연변이 추가 동반, 1명은 비bZIP 이중대립 <i>CEBPA</i></td></tr>
+        <tr><td><span class="chip int">중간</span></td><td class="r">298</td><td class="r">21</td><td class="r">231</td><td class="r">46</td><td>양호 이동은 모두 <i>CEBPA</i> bZIP 인프레임, 불량 이동은 모두 MR 돌연변이</td></tr>
+        <tr><td><span class="chip adv">불량</span></td><td class="r">108</td><td class="r">0</td><td class="r">33</td><td class="r">75</td><td>모두 <i>NPM1</i> 야생형 + <i>FLT3</i>-ITD 고 AR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>ELN-2017 양호군 내부</h4>
+  <p>2022 기준 양호, 중간, 불량의 5년 OS는 57.0%, 47.3%, 33.3%였지만 모두 유의하지 않았습니다(쌍별 p=0.325, 0.643, 0.905). 불량군은 3명뿐이어서 신뢰구간이 0.9–77.4%로 매우 넓습니다. 그런데 이식 시점에서 중도절단하자 양호 60.8% 대 중간 15.7%로 유의한 분리(p=0.007)가 나타났습니다. 즉 <i>NPM1</i> 돌연변이와 저 AR <i>FLT3</i>-ITD를 가진 환자는 이식 없이는 예후가 나쁘지만, 이 코호트에서는 이식이 그 불량성을 상쇄하고 있었다는 해석입니다.</p>
+
+  <h4>ELN-2017 중간군 내부: 가장 선명한 결과</h4>
+
+  <div class="figure" role="figure" aria-labelledby="fig2-title">
+    <p class="fig-title" id="fig2-title">그림 2. ELN-2017 중간위험군(n=298)을 ELN-2022로 재분류했을 때의 5년 OS와 5년 RFS</p>
+    <svg viewBox="0 0 620 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2022 양호로 이동한 21명 OS 71.1% RFS 65.0%, 중간 유지 OS 37.5% RFS 43.7%, 불량으로 이동한 46명 OS 14.6% RFS 18.8%">
+      <g font-size="12" fill="var(--muted)">
+        <line x1="170" y1="8" x2="170" y2="135" stroke="var(--rule)"/>
+        <line x1="270" y1="8" x2="270" y2="135" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="370" y1="8" x2="370" y2="135" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="470" y1="8" x2="470" y2="135" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="570" y1="8" x2="570" y2="135" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <text x="170" y="152" text-anchor="middle">0%</text>
+        <text x="270" y="152" text-anchor="middle">25%</text>
+        <text x="370" y="152" text-anchor="middle">50%</text>
+        <text x="470" y="152" text-anchor="middle">75%</text>
+        <text x="570" y="152" text-anchor="middle">100%</text>
+      </g>
+      <g font-size="13" fill="var(--ink)">
+        <text x="160" y="30" text-anchor="end">→ 양호 (n=21)</text>
+        <text x="160" y="72" text-anchor="end">중간 유지</text>
+        <text x="160" y="114" text-anchor="end">→ 불량 (n=46)</text>
+      </g>
+      <rect x="170" y="16" width="284.4" height="15" fill="var(--fav)"/>
+      <rect x="170" y="34" width="260" height="7" fill="none" stroke="var(--fav)" stroke-width="1.5"/>
+      <rect x="170" y="58" width="150" height="15" fill="var(--int)"/>
+      <rect x="170" y="76" width="174.8" height="7" fill="none" stroke="var(--int)" stroke-width="1.5"/>
+      <rect x="170" y="100" width="58.4" height="15" fill="var(--adv)"/>
+      <rect x="170" y="118" width="75.2" height="7" fill="none" stroke="var(--adv)" stroke-width="1.5"/>
+      <g font-size="12" fill="var(--ink)">
+        <text x="460" y="28">OS 71.1%</text><text x="436" y="42" fill="var(--muted)">RFS 65.0%</text>
+        <text x="326" y="70">OS 37.5%</text><text x="350" y="84" fill="var(--muted)">RFS 43.7%</text>
+        <text x="234" y="112">OS 14.6%</text><text x="251" y="126" fill="var(--muted)">RFS 18.8%</text>
+      </g>
+    </svg>
+    <p class="fig-cap">굵은 막대는 5년 OS, 윤곽 막대는 5년 RFS입니다. OS 쌍별 비교는 양호 대 중간 p=0.023, 양호 대 불량 p&lt;0.001, 중간 대 불량 p&lt;0.001.</p>
+  </div>
+
+  <p>EFS도 61.9%, 34.1%, 9.9%로 잘 분리되었습니다. <i>CEBPA</i> bZIP 인프레임 돌연변이로 양호군에 들어온 21명은 실제로 양호군다운 결과를 보였고, MR 돌연변이로 불량군에 들어간 46명은 5년 OS 14.6%로 불량군다운 결과를 보였습니다. <strong>이것은 Rausch 연구와 정면으로 반대되는 관찰</strong>입니다.</p>
+
+  <h4>ELN-2017 불량군 내부</h4>
+  <p>중간으로 이동한 33명(30.6%)은 모두 <i>NPM1</i> 야생형과 고 AR <i>FLT3</i>-ITD를 가졌는데, 재분류 후에도 불량군과 비슷하게 나빴습니다. 저자들은 이 코호트에서 FLT3 억제제가 사용되지 않았기 때문으로 해석합니다. Rausch 연구에서 불량에서 중간으로 이동한 21명의 5년 OS가 10%였던 것과 같은 방향입니다.</p>
+
+  <h3 id="p3-stats">3.3 판별력: C-index와 NRI</h3>
+  <p>Harrell C-index는 ELN-2017 0.592(95% CI 0.557–0.627), ELN-2022 0.614(0.579–0.649)로 새 체계가 높았지만 유의하지 않았습니다(p=0.059). 재분류된 134명만 보면 0.527 대 0.599로 차이가 더 컸지만 역시 유의하지 않았습니다(p=0.158).</p>
+  <p>순재분류지수(NRI)는 전체 환자에서 12개월 시점에 양수였지만 신뢰구간이 0을 포함했고, 시간이 지날수록 커져 5년 시점에는 모든 추정치와 신뢰구간이 양수였습니다. 같은 위험군에 머문 환자를 제외하면 NRI는 더 높아지는 경향을 보였습니다. 저자들은 이를 새 모형이 특히 <strong>장기 생존</strong>을 더 정확히 반영한다는 근거로 봅니다.</p>
+  <p>다변량 Cox 모형에서는 ELN-2022, 연령, 동종이식이 독립 예후 인자였습니다.</p>
+  <div class="tablewrap">
+    <table>
+      <caption>표 12. ELN-2022 위험군의 위험비 (양호 대비)</caption>
+      <thead><tr><th>종점</th><th class="r">중간 HR (95% CI)</th><th class="r">불량 HR (95% CI)</th></tr></thead>
+      <tbody>
+        <tr><td>OS</td><td class="r">1.836 (1.422–2.370)</td><td class="r">3.109 (2.333–4.143)</td></tr>
+        <tr><td>EFS</td><td class="r">1.726 (1.355–2.200)</td><td class="r">2.765 (2.094–3.650)</td></tr>
+        <tr><td>RFS</td><td class="r">1.736 (1.327–2.272)</td><td class="r">2.474 (1.777–3.444)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="num">모든 비교에서 p&lt;0.001입니다.</p>
+
+  <h3 id="p3-hct">3.4 동종이식 결정에의 함의</h3>
+  <p>CR 환자만 분석했을 때 ELN-2022 양호군에서는 이식 여부에 따른 생존 차이가 없었고, 중간과 불량군에서는 이식군이 더 좋았습니다. ELN-2017 중간에서 2022 양호로 이동한 CR 환자 20명은 이식 이득이 없었고, 반대로 2017 양호에서 2022 비양호로 이동한 환자(<i>NPM1</i> 돌연변이 + 저 AR ITD)는 이식으로 현저한 생존 개선을 보였습니다.</p>
+  <p>저자들은 이로부터 <i>NPM1</i> 돌연변이와 저 AR <i>FLT3</i>-ITD 조합은 양호 위험이 아니며, FLT3 억제제 병용과 이식이 필요하다고 주장하고, Sakaguchi 등과 Oran 등의 선행 연구를 근거로 제시합니다. 반대로 <i>CEBPA</i> bZIP 환자는 이식보다 공고 항암만으로 충분한 군으로 이동했습니다. 결과적으로 양호군의 경계를 넘나든 환자는 55명(8.8%)으로, <strong>약 9%의 환자에서 이식 결정이 바뀔 수 있다</strong>는 것이 이 연구의 가장 실용적인 메시지입니다.</p>
+
+  <h3 id="p3-critique">3.5 강점과 한계 평가</h3>
+  <p><strong>강점</strong>은 아시아인 실제 임상 코호트라는 점, 긴 추적, 공개 기탁된 염기서열 데이터, 그리고 분자 정보가 이식 결정에 반영되지 않았다는 "자연 실험"적 특성입니다. 마지막 특성 덕분에 분자 위험군이 이식으로 어떻게 달라지는지 비교적 선명하게 볼 수 있습니다. C-index와 함께 NRI를 시점별로 보고한 것도 체계 비교 방법론으로서 더 풍부합니다.</p>
+  <p><strong>한계</strong>로 저자들은 후향적 설계, 여러 기존 코호트의 결합, 7+3 적격 환자만 포함되어 상대적으로 젊고 sAML·tAML 비율이 낮다는 점, 성비와 연령 분포가 실제 AML 인구와 다를 수 있다는 점, MRD 데이터가 없어 MRD 기반 동적 위험 평가를 반영하지 못했다는 점을 듭니다. 여기에 다음을 덧붙일 수 있습니다.</p>
+  <ul>
+    <li><strong>선택 편향</strong>: 624명 중 394명이 "이차형 돌연변이 AML" 연구에서 왔습니다. 이 연구 자체가 해당 돌연변이의 불량 예후를 보고한 연구(Song 2022, Bone Marrow Transplant)이므로, MR 돌연변이 효과에 대한 독립적 검증이라 보기 어렵고 효과 크기가 부풀려졌을 가능성을 배제할 수 없습니다.</li>
+    <li><strong>위험군 분포의 비전형성</strong>: 불량군이 19.9%에 불과해 Rausch의 41%나 일반적 성인 AML 보고보다 훨씬 낮습니다. 이는 코호트 구성 효과와 연령 차이를 반영할 가능성이 큽니다.</li>
+    <li><strong>통계적 검정력</strong>: 세부 재분류 하위군이 3명, 21명, 33명 수준이어서 넓은 신뢰구간을 보입니다.</li>
+    <li><strong>해석의 비대칭</strong>: C-index 차이가 유의하지 않음에도 "더 정확하게 층화한다"는 결론은 다소 강하며, NRI는 범주형 모형 비교에서 과대평가되기 쉽다는 방법론적 비판이 있습니다(4.3 참조).</li>
+  </ul>
+</section>
+
+<!-- ============ PART IV ============ -->
+<section class="part measure" id="p4">
+  <h2>IV. 통합 고찰</h2>
+  <p class="part-sub">같은 체계를 검증한 두 연구가 왜 다른 결론에 도달했는가</p>
+
+  <h3 id="p4-compare">4.1 두 검증 연구의 비교</h3>
+  <div class="tablewrap">
+    <table>
+      <caption>표 13. Rausch 2023과 Song 2024의 직접 비교</caption>
+      <thead><tr><th>항목</th><th>Rausch (독일)</th><th>Song (한국)</th></tr></thead>
+      <tbody>
+        <tr><td>환자 수</td><td>1,118 (+ 검증 1,160)</td><td>624</td></tr>
+        <tr><td>연령 중앙값</td><td>58세 (18–86)</td><td>51세 (18–84)</td></tr>
+        <tr><td>등록 기간</td><td>1999–2012</td><td>1998–2014</td></tr>
+        <tr><td>코호트 성격</td><td>두 개의 전향적 3상 임상시험</td><td>기존 연구 코호트 결합, 후향적</td></tr>
+        <tr><td>유전자 패널</td><td>68개</td><td>45개</td></tr>
+        <tr><td>2022 분포 (양호/중간/불량)</td><td>32 / 27 / 41%</td><td>32.9 / 47.3 / 19.9%</td></tr>
+        <tr><td>재분류 비율</td><td>15%</td><td>21.5%</td></tr>
+        <tr><td>CR (양호/중간/불량)</td><td>73 / 66 / 45%</td><td>92.2 / 85.4 / 66.1%</td></tr>
+        <tr><td>C-index (2017 → 2022)</td><td>0.664 → 0.658 (공변량 보정, OS)</td><td>0.592 → 0.614 (p=0.059)</td></tr>
+        <tr><td>MR 돌연변이로 불량 이동한 군</td><td>다른 불량군보다 좋고 중간과 비슷 (발견), 중간보다 나쁨 (검증)</td><td>5년 OS 14.6%로 불량군다운 결과</td></tr>
+        <tr><td><i>FLT3</i>-ITD 고 AR, 불량 → 중간</td><td>5년 OS 10%로 여전히 나쁨</td><td>여전히 불량과 비슷</td></tr>
+        <tr><td>이식 이득</td><td>OS 이득은 불량군에서만 유의</td><td>중간·불량군에서 이득</td></tr>
+        <tr><td>결론</td><td>불량군 확대, 판별력은 약간 저하. 5단계 정교화 제안</td><td>층화가 더 세밀, 이식 결정 개선</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>두 연구가 <strong>일치하는 지점</strong>도 분명합니다. <i>CEBPA</i> bZIP 인프레임 돌연변이를 양호로 본 결정은 양쪽 모두에서 타당했고, FLT3 억제제 없이 치료된 고 AR <i>FLT3</i>-ITD 환자를 중간으로 옮기는 것은 과거 데이터로는 지지되지 않으며 이는 체계의 오류라기보다 치료 맥락 변화를 앞서 반영한 결과입니다. 그리고 두 연구 모두 재분류가 소수(15–22%)에 국한된다는 점에서 ELN-2022를 점진적 개정으로 평가합니다.</p>
+
+  <h3 id="p4-discord">4.2 MR 돌연변이에 대한 결론이 갈린 이유</h3>
+  <p>같은 질문에 반대 답이 나왔을 때는 어느 쪽이 맞는지 고르기보다 차이를 설명하는 변수를 찾는 것이 학문적으로 더 생산적입니다. 가능한 설명은 다음과 같습니다.</p>
+  <ol class="prose">
+    <li><strong>코호트 선택</strong>: Song 코호트의 상당 부분(중복 제거 전 394명)이 이차형 돌연변이의 불량 예후를 보고한 기존 연구에서 왔습니다. 동일 데이터의 재사용은 독립 검증의 의미를 약화시킵니다.</li>
+    <li><strong>이식 정책의 차이</strong>: Song 코호트에서는 양호 세포유전을 제외한 모든 환자가 이식을 목표로 했고 CR 환자의 44.9%가 이식을 받았습니다. Rausch 코호트에서는 CR 665명 중 109명(약 16%)만 CR1 이식을 받았습니다. 이식이 MR 돌연변이의 불량성을 상쇄한다면(Song 2022의 주장), 이식률이 낮은 코호트에서 MR 군이 더 나쁘게 나와야 하는데, 실제로는 반대입니다. 따라서 이식만으로는 불일치를 설명하기 어렵고, 비교 기준군(Rausch의 "기타 불량" 군에는 <i>TP53</i>·복합핵형 등 극히 나쁜 환자가 다수 포함)의 구성 차이가 더 중요해 보입니다.</li>
+    <li><strong>비교 기준의 차이</strong>: Rausch는 MR 군을 "다른 불량군"과 비교했고, Song은 같은 ELN-2017 중간군 안에서 비교했습니다. 비교 대상이 다르면 같은 효과도 다르게 보입니다. 엄밀하게 대응되는 비교는 "MR 군 대 나머지 중간군"이며, 이 비교에서 Rausch 발견 코호트는 차이 없음, Rausch 검증 코호트와 Song 코호트는 MR 군이 더 나쁨으로 나타나 <strong>세 데이터셋 중 둘이 MR 돌연변이의 독립적 불량 효과를 지지</strong>합니다.</li>
+    <li><strong>연령과 공동 돌연변이</strong>: MR 돌연변이는 고령과 강하게 연관되며, 고령은 그 자체로 강력한 예후 인자입니다. 젊은 Song 코호트에서는 MR 돌연변이가 sAML 유사 생물학의 더 순수한 표지일 수 있습니다.</li>
+    <li><strong>유전자별 이질성</strong>: 일곱 유전자를 하나로 묶어 다루는 것 자체가 문제일 수 있습니다. 예컨대 <i>SF3B1</i>과 <i>STAG2</i>, <i>BCOR</i>의 예후 효과가 같다고 가정할 근거는 약하며, 공동 돌연변이 수와 VAF(클론 우세성)도 영향을 줄 수 있습니다.</li>
+    <li><strong><i>NPM1</i>과의 위계</strong>: ELN-2022에서 MR 돌연변이는 <i>NPM1</i>의 양호 효과를 상쇄하지 않습니다. Song 연구도 이 원칙을 따랐고, 이후 Eckardt 등(Leukemia 2023)은 <i>NPM1</i> 돌연변이 AML에서 이차형 돌연변이가 결과에 영향을 주지 않음을 보고해 이 위계를 지지했습니다.</li>
+  </ol>
+
+  <div class="box critique">
+    <p class="box-h">종합 판단</p>
+    <p>현재 증거를 종합하면 MR 돌연변이는 "<i>TP53</i>·복합핵형 수준의 불량"이 아니라 "중간과 불량 사이"의 효과를 가지며, 그 크기는 연령, 이식 접근성, 비교 기준군 구성에 따라 달라 보입니다. 이는 3단계 범주형 체계가 연속적인 위험을 이산화할 때 생기는 고유한 한계이기도 합니다. Rausch의 5단계 제안이나 개인화된 연속 위험 모형이 이 문제에 대한 자연스러운 대응입니다.</p>
+  </div>
+
+  <h3 id="p4-methods">4.3 방법론적 교훈</h3>
+  <h4>C-index의 한계</h4>
+  <p>세 범주로 이루어진 위험 체계의 C-index는 동순위(tie)가 많아 본질적으로 상한이 낮고, 두 체계가 15–20% 환자에서만 다르면 차이가 작게 나올 수밖에 없습니다. Rausch(0.658 대 0.664)와 Song(0.614 대 0.592)의 방향이 반대인 것은 코호트 차이도 있지만, 공변량 보정 여부(Rausch는 연령·성별·AML 유형 보정)라는 계산 방식의 차이도 있습니다. 보정 모형의 C-index는 위험 체계 자체보다 연령 같은 강력한 공변량의 기여가 크므로, 체계 간 차이가 희석됩니다.</p>
+  <h4>NRI의 해석 주의</h4>
+  <p>NRI는 새 모형이 사건 발생자를 위쪽으로, 비발생자를 아래쪽으로 옮긴 순비율을 측정합니다. 직관적이지만 모형의 보정(calibration)이 나쁠 때도 양수가 나올 수 있고, 사건군과 비사건군 구성요소를 따로 보고하지 않으면 해석이 어렵다는 비판이 Pepe, Kerr 등에 의해 제기되어 왔습니다. 따라서 Song 연구의 양수 NRI는 유망한 신호이지만, C-index의 비유의성과 함께 신중히 읽어야 합니다.</p>
+  <h4>이식이라는 시간의존 교란</h4>
+  <p>두 연구 모두 이식을 시간의존 공변량으로 처리했지만, 이식 결정 자체가 비무작위이므로 잔여 교란은 남습니다. Song 연구의 "이식 시점 중도절단" 분석은 정보적 중도절단(informative censoring) 가정 위반 가능성이 있어, 경쟁위험 모형이나 표적 시험 모방(target trial emulation) 설계가 보완책이 될 수 있습니다.</p>
+  <h4>분류 체계 개정 효과의 분리</h4>
+  <p>"새 체계가 더 나은가"라는 질문은 사실 "변경된 각 요소가 개별적으로 타당한가"라는 여러 질문의 묶음입니다. 두 연구 모두 재분류 경로별로 분석한 것은 바람직한 접근이며, 향후 검증 연구에서도 표준으로 삼을 만합니다.</p>
+
+  <h3 id="p4-link">4.4 WHO 분류와 ELN 예후의 접점</h3>
+  <p>세 논문을 함께 읽으면 진단 체계와 예후 체계가 같은 유전 정보를 서로 다른 목적에 사용하고 있음이 드러납니다.</p>
+  <div class="tablewrap">
+    <table>
+      <caption>표 14. 같은 유전 표지, 다른 역할</caption>
+      <thead><tr><th>표지</th><th>WHO-HAEM5에서의 역할</th><th>ELN-2022에서의 역할</th><th>검증 연구가 시사하는 점</th></tr></thead>
+      <tbody>
+        <tr><td>MR 8개 유전자</td><td>AML-MR 정의 (<i>RUNX1</i> 제외)</td><td>불량 위험 (<i>ASXL1</i>은 2017부터, 나머지 7개는 2022 추가)</td><td>예후 효과 크기는 논쟁 중</td></tr>
+        <tr><td><i>RUNX1</i></td><td>독립 AML 유형 아님</td><td>불량 위험</td><td>—</td></tr>
+        <tr><td><i>CEBPA</i></td><td>이중대립 또는 smbZIP로 AML 유형 정의</td><td>bZIP 인프레임만 양호</td><td>두 연구 모두 양호 효과 확인, 매우 양호 후보</td></tr>
+        <tr><td><i>TP53</i></td><td>MDS-bi<i>TP53</i>, AEL의 특징</td><td>불량 위험</td><td>복합핵형 동반 시 5년 OS 0%, 별도 범주 필요</td></tr>
+        <tr><td><i>FLT3</i>-ITD</td><td>AML 유형 정의에 사용 안 함</td><td>AR 무관 중간위험</td><td>억제제 없는 코호트에서는 고 AR이 여전히 불량</td></tr>
+        <tr><td><i>NPM1</i></td><td>모세포 기준 없이 AML 정의</td><td>ITD 없으면 양호, MR 돌연변이가 상쇄하지 않음</td><td>저 AR ITD 동반 시 이식 필요성 제기 (Song)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>실무적으로 중요한 점은, WHO-HAEM5에서 AML-MR로 진단된 환자가 자동으로 ELN-2022 불량위험인 것은 아니라는 사실입니다. 예를 들어 <i>NPM1</i> 돌연변이와 MR 돌연변이가 공존하면 WHO에서는 <i>NPM1</i> 돌연변이 AML이 우선하고, ELN에서도 <i>NPM1</i>의 양호 효과가 유지됩니다. 진단명과 위험군을 혼동하지 않는 습관이 필요합니다.</p>
+
+  <h3 id="p4-future">4.5 이후의 전개와 남은 연구 과제</h3>
+  <p>이 문서의 범위 밖이지만 맥락을 위해 덧붙이면, ELN은 2024년에 저강도 치료(특히 베네토클락스 병용) 환자를 위한 별도의 유전적 위험 분류를 제안했습니다(Döhner H 외, Blood 2024). 이는 Rausch 연구가 지적한 "예후 체계는 치료 맥락에 종속된다"는 원칙이 공식적으로 받아들여진 사례로 볼 수 있습니다. 세부 기준은 원문을 직접 확인하시기 바랍니다.</p>
+  <p>세 논문이 공통으로 가리키는 연구 과제는 다음과 같습니다.</p>
+  <ul>
+    <li><strong>현대 치료 코호트 검증</strong>: 미도스타우린·길테리티닙·퀴자티닙, CPX-351, 젬투주맙, 베네토클락스를 받은 환자에서 ELN-2022를 재검증해야 합니다.</li>
+    <li><strong>MRD의 통합</strong>: 진단 시 정적 위험과 치료 반응 기반 동적 위험(MRD)을 결합한 모형이 필요합니다.</li>
+    <li><strong>MR 유전자별 효과 해부</strong>: 일곱 유전자를 개별적으로, 공동 돌연변이 수와 VAF를 고려해 분석해야 합니다.</li>
+    <li><strong>예후에서 예측으로</strong>: 치료 선택지별 기대 결과를 비교하는 개인화 모형(knowledge bank, 머신러닝)의 전향적 검증이 필요합니다.</li>
+    <li><strong>인구 다양성</strong>: 아시아 코호트(Song)와 유럽 코호트(Rausch)의 차이가 생물학적 차이인지, 진료 체계 차이인지 밝혀야 합니다.</li>
+    <li><strong>WHO와 ICC의 조화</strong>: 두 분류의 병존이 임상시험과 등록 통계에 미치는 영향을 줄이기 위한 통합이 과제로 남아 있습니다.</li>
+  </ul>
+</section>
+
+<!-- ============ PART V ============ -->
+<section class="part measure" id="p5">
+  <h2>V. 핵심 정리와 용어</h2>
+
+  <div class="box summary">
+    <p class="box-h">한 문단 요약</p>
+    <p>WHO-HAEM5는 골수성 종양을 계통·임상·생물학 속성의 조합으로 재정의하고, 대부분의 유전 정의 AML에서 모세포 기준을 없애며, MDS를 "종양"으로 개명하고 유전 정의 유형을 중심으로 재편했고, CH를 전구 상태로 공식 편입했습니다. ELN-2022는 <i>FLT3</i>-ITD 대립유전자비를 버리고, <i>CEBPA</i>를 bZIP 인프레임으로 한정하고, MR 돌연변이를 불량 표지로 추가했습니다. 독일 코호트(Rausch)는 새 체계가 불량군을 넓히는 대가로 판별력이 약간 떨어지며 MR 돌연변이 환자는 중간위험에 가깝다고 보고하고 매우 양호·매우 불량을 추가한 5단계를 제안했습니다. 한국 코호트(Song)는 새 체계가 ELN-2017의 각 군을 더 세밀하게 나누고 MR 돌연변이 환자가 실제로 불량하며 약 9%의 환자에서 이식 결정이 달라질 수 있다고 보고했습니다. 차이는 코호트 구성, 비교 기준군, 이식 정책, 연령에서 비롯되었을 가능성이 높습니다.</p>
+  </div>
+
+  <h3>시험 대비 핵심 포인트</h3>
+  <ul>
+    <li>CHIP의 VAF 기준은 2% (남성 X 연관 유전자 4%), CCUS 빈혈 기준은 남 13, 여 12 g/dL입니다.</li>
+    <li>CML 가속기 삭제, CEL 기간 6개월에서 4주로, JMML은 MPN으로, CMML 단핵구 0.5 × 10⁹/L, CMML-0 삭제.</li>
+    <li>MDS 이형성 역치 10%, MDS-bi<i>TP53</i>은 MDS-5q와 MDS-<i>SF3B1</i>보다 우선, MDS-h 신설, MDS-U 삭제.</li>
+    <li>AML에서 모세포 20%가 필요한 유전 유형은 <i>BCR</i>::<i>ABL1</i>과 <i>CEBPA</i> (AML-MR도 20% 필요).</li>
+    <li>AML-MR 유전자: <i>SRSF2, SF3B1, U2AF1, ZRSR2, ASXL1, EZH2, BCOR, STAG2</i>.</li>
+    <li>MN-pCT에 PARP1 억제제 추가, 메토트렉세이트 제외.</li>
+    <li>Rausch: 15% 재분류, C-index 0.658 대 0.664, MR 재배정 79명, 매우 불량(CK + <i>TP53</i>) 5년 OS 0%.</li>
+    <li>Song: 21.5% 재분류, C-index 0.614 대 0.592 (p=0.059), 2017 중간 → 2022 불량 46명 5년 OS 14.6%.</li>
+  </ul>
+
+  <h3>용어 정리</h3>
+  <dl class="gloss">
+    <dt>VAF</dt><dd>변이 대립유전자 빈도. 전체 판독 중 변이를 가진 판독의 비율로, 클론 크기의 대리 지표입니다.</dd>
+    <dt>CHIP / CCUS</dt><dd>미확정 잠재력의 클론성 조혈 / 미확정 의의의 클론성 혈구감소증.</dd>
+    <dt>Multi-hit <i>TP53</i></dt><dd>두 대립유전자 모두 불활성화되어 야생형 p53이 남지 않은 상태.</dd>
+    <dt>AML-MR</dt><dd>골수형성이상 관련 AML. 세포유전 이상, 8개 유전자 돌연변이, 또는 MDS 병력으로 정의됩니다.</dd>
+    <dt>MN-pCT</dt><dd>세포독성 치료 후 골수종양. "치료 관련"을 대체한 용어입니다.</dd>
+    <dt>AR (allelic ratio)</dt><dd><i>FLT3</i>-ITD 대 야생형 대립유전자의 비. ELN-2017에서 0.5를 기준으로 고·저를 구분했습니다.</dd>
+    <dt><i>CEBPA</i><sup>bZIP-inf</sup></dt><dd><i>CEBPA</i>의 염기성 류신 지퍼 영역의 인프레임 돌연변이.</dd>
+    <dt>CR / RFS / EFS / OS</dt><dd>완전관해 / 무재발생존 / 무사건생존 / 전체생존.</dd>
+    <dt>Harrell C-index</dt><dd>무작위로 고른 두 환자 중 더 일찍 사건이 생긴 환자에게 모형이 더 높은 위험을 부여한 비율. 0.5는 무작위, 1.0은 완벽한 판별입니다.</dd>
+    <dt>NRI</dt><dd>순재분류지수. 새 모형이 사건 발생자를 더 높은 위험군으로, 비발생자를 더 낮은 위험군으로 옮긴 순비율의 합입니다.</dd>
+    <dt>Cohen kappa</dt><dd>우연에 의한 일치를 보정한 범주 일치도. 가중 kappa는 인접 범주 간 불일치에 부분 점수를 줍니다.</dd>
+    <dt>Simon–Makuch / Mantel–Byar</dt><dd>이식처럼 시간에 따라 상태가 바뀌는 노출을 불멸 시간 편향 없이 분석하는 방법.</dd>
+    <dt>ICC</dt><dd>International Consensus Classification. 2022년 WHO-HAEM5와 병행 발표된 분류 체계.</dd>
+  </dl>
+</section>
+
+<section class="part measure" id="refs">
+  <h2>참고문헌</h2>
+  <p class="part-sub">본문의 주 대상 논문 세 편과, 해설에서 언급한 핵심 문헌입니다.</p>
+  <ol class="refs">
+    <li>Khoury JD, Solary E, Abla O, et al. The 5th edition of the World Health Organization Classification of Haematolymphoid Tumours: Myeloid and Histiocytic/Dendritic Neoplasms. <i>Leukemia</i>. 2022;36:1703–1719. <a href="https://www.nature.com/articles/s41375-022-01613-1">doi:10.1038/s41375-022-01613-1</a></li>
+    <li>Rausch C, Rothenberg-Thurley M, Dufour A, et al. Validation and refinement of the 2022 European LeukemiaNet genetic risk stratification of acute myeloid leukemia. <i>Leukemia</i>. 2023;37:1234–1244. <a href="https://www.nature.com/articles/s41375-023-01884-2">doi:10.1038/s41375-023-01884-2</a></li>
+    <li>Song GY, Kim HJ, Kim T, et al. Validation of the 2022 European LeukemiaNet risk stratification for acute myeloid leukemia. <i>Sci Rep</i>. 2024;14:8517. <a href="https://www.nature.com/articles/s41598-024-57295-5">doi:10.1038/s41598-024-57295-5</a></li>
+    <li>Döhner H, Wei AH, Appelbaum FR, et al. Diagnosis and management of AML in adults: 2022 recommendations from an international expert panel on behalf of the ELN. <i>Blood</i>. 2022;140:1345–1377.</li>
+    <li>Döhner H, Estey E, Grimwade D, et al. Diagnosis and management of AML in adults: 2017 ELN recommendations from an international expert panel. <i>Blood</i>. 2017;129:424–447.</li>
+    <li>Arber DA, Orazi A, Hasserjian RP, et al. International Consensus Classification of Myeloid Neoplasms and Acute Leukemias. <i>Blood</i>. 2022;140:1200–1228.</li>
+    <li>Alaggio R, Amador C, Anagnostopoulos I, et al. The 5th edition of the WHO Classification of Haematolymphoid Tumours: Lymphoid Neoplasms. <i>Leukemia</i>. 2022;36:1720–1748.</li>
+    <li>Lindsley RC, Mar BG, Mazzola E, et al. Acute myeloid leukemia ontogeny is defined by distinct somatic mutations. <i>Blood</i>. 2015;125:1367–1376.</li>
+    <li>Papaemmanuil E, Gerstung M, Bullinger L, et al. Genomic classification and prognosis in acute myeloid leukemia. <i>N Engl J Med</i>. 2016;374:2209–2221.</li>
+    <li>Bernard E, Nannya Y, Hasserjian RP, et al. Implications of <i>TP53</i> allelic state for genome stability, clinical presentation and outcomes in myelodysplastic syndromes. <i>Nat Med</i>. 2020;26:1549–1556.</li>
+    <li>Taube F, Georgi JA, Kramer M, et al. <i>CEBPA</i> mutations in 4708 patients with AML: differential impact of bZIP and TAD mutations on outcome. <i>Blood</i>. 2022;139:87–103.</li>
+    <li>Herold T, Rothenberg-Thurley M, Grunwald VV, et al. Validation and refinement of the revised 2017 ELN genetic risk stratification of AML. <i>Leukemia</i>. 2020;34:3161–3172.</li>
+    <li>Song GY, Kim T, Ahn SY, et al. Allogeneic hematopoietic cell transplantation can overcome the adverse prognosis indicated by secondary-type mutations in de novo AML. <i>Bone Marrow Transplant</i>. 2022;57:1810–1819.</li>
+    <li>Eckardt JN, Bill M, Rausch C, et al. Secondary-type mutations do not impact outcome in <i>NPM1</i>-mutated AML. <i>Leukemia</i>. 2023;37:2282–2285.</li>
+    <li>Sakaguchi M, Yamaguchi H, Najima Y, et al. Prognostic impact of low allelic ratio <i>FLT3</i>-ITD and <i>NPM1</i> mutation in AML. <i>Blood Adv</i>. 2018;2:2744–2754.</li>
+    <li>Pencina MJ, D'Agostino RB Sr, Steyerberg EW. Extensions of net reclassification improvement calculations to measure usefulness of new biomarkers. <i>Stat Med</i>. 2011;30:11–21.</li>
+  </ol>
+  <footer>
+    <p>이 문서는 세 편의 오픈 액세스 논문(CC BY 4.0) 내용을 한국어로 재구성·해설한 학습 자료입니다. 표와 그림의 수치는 원문 보고값을 옮겼으며, "보충" 또는 "추가 고찰"로 표시한 부분은 원문 외 지식에 근거한 해설입니다. 임상 결정에는 반드시 원문과 최신 지침을 직접 확인하시기 바랍니다.</p>
+  </footer>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+  // clone TOC into mobile details
+  try{
+    var src=document.querySelector('#toc > ol');
+    var dst=document.getElementById('mtoc');
+    if(src&&dst){dst.appendChild(src.cloneNode(true));
+      dst.addEventListener('click',function(e){if(e.target.tagName==='A'){var d=dst.closest('details');if(d)d.open=false;}});}
+  }catch(e){}
+  // scrollspy
+  try{
+    var links=[].slice.call(document.querySelectorAll('#toc a'));
+    var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+    var targets=Object.keys(map).map(function(id){return document.getElementById(id);}).filter(Boolean);
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){links.forEach(function(l){l.classList.remove('active');});
+            var a=map[en.target.id];if(a)a.classList.add('active');}
+        });
+      },{rootMargin:'0px 0px -75% 0px',threshold:0});
+      targets.forEach(function(t){io.observe(t);});
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
